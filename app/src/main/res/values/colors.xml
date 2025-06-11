@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="verdoso">#76d7c4</color>
+
+    <color name="rojizo">#f06292</color>
+    <color name="violeta">#ba68c8</color>
+    <color name="naranjal">#ffb74d</color>
+    <color name="morado_claro">#d1c4e9</color>
+    <color name="azulado">#5c6bc0</color>
+
+    <color name="gris_pizarra">#474a51</color>
+    <color name="turquesa">#4db6ac</color>
+    <color name="verde_claro">#81c784</color>
+    <color name="amarillo_lima">#d4e157</color>
+    <color name="amarillo_claro">#fff176</color>
+    <color name="amarillo_dorado">#ffd54f</color>
+    <color name="naranja_salmon">#ff8a65</color>
+    <color name="marron_suave">#a1887f</color>
+    <color name="gris_claro">#bdbdbd</color>
+    <color name="gris_azulado">#90a4ae</color>
+    <color name="pizarron">#dddee0</color>
+
+    <color name="titulo_color">#00695c</color>
+    <color name="texto_normal">#263238</color>
+    <color name="texto_tareas">#434750</color>
+
+    <color name="aceptar_color">#90EE90</color>
+    <color name="rechazar_color">#e62e1b</color>
+</resources>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/azulado"
+            android:paddingTop="15dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:title="@string/app_name"
+            />
+
+
+
+        <TextView
+            android:layout_marginTop="@dimen/separar_btn_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/titulo_tareas"
+            android:textColor="@color/gris_pizarra"
+            android:textSize="@dimen/texto_titulo" />
+
+        <LinearLayout
+            android:id="@+id/contenedor_tareas"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/heith_contenedor_tareas"
+            android:layout_margin="@dimen/margen_contenedor_tareas"
+            android:background="@color/pizarron"
+            android:orientation="vertical"
+            android:padding="16dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginRight="10dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btn_agregar_tarea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/agregar_tarea"
+                android:src="@android:drawable/ic_input_add"
+                app:backgroundTint="@color/azulado"
+                app:layout_constraintTop_toBottomOf="@+id/texto_frase_dia" />
+
+            />
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btn_editar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/separar_btn_derecha"
+                android:contentDescription="@string/editar_tarea"
+                android:src="@android:drawable/ic_menu_edit"
+                app:backgroundTint="@color/violeta" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btn_confirmar_tarea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/separar_btn_derecha"
+                android:contentDescription="@string/confirmar_tarea"
+                android:src="@android:drawable/ic_menu_save"
+                app:backgroundTint="@color/verde_claro" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/texto_frase_dia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="@dimen/margen_frase_Del_dia"
+            android:layout_marginTop="12dp"
+            android:fontFamily="casual"
+            android:gravity="center"
+            android:text="@string/frase_dia"
+            android:textColor="@color/titulo_color"
+            android:textSize="@dimen/texto_subtitulo"
+            android:textStyle="bold" />
+
+
+        <LinearLayout
+            android:id="@+id/contenedor_botones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <Button
+                android:id="@+id/btn_otra_frase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/separar_btn_top"
+                app:layout_constraintTop_toBottomOf="@+id/contenedor_botones"                android:background="@drawable/redondear_button"
+                android:text="@string/btn_otra_frase"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:backgroundTint="@color/gris_pizarra"/>
+
+            <Button
+                android:id="@+id/btn_ver_progreso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/separar_btn_top"
+                android:background="@drawable/redondear_button_orange"
+                android:text="@string/btn_ver_progreso"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:backgroundTint="@color/naranjal"
+                app:layout_constraintTop_toBottomOf="@+id/btn_otra_frase"/>
+
+            <Button
+                android:id="@+id/btn_historial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/redondear_button_morado"
+                android:layout_marginBottom="@dimen/separar_btn_top"
+                android:text="@string/btn_historial"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:backgroundTint="@color/violeta"
+                app:layout_constraintTop_toBottomOf="@+id/btn_otra_frase"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/drawer_menu"
+        app:headerLayout="@layout/nav_header" />
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,27 @@
+<resources>
+    <!-- Actividad Principal -->
+    <string name="navigation_drawer_open">Abrir menú</string>
+    <string name="navigation_drawer_close">Cerrar menú</string>
+
+    <string name="app_name">Mis Hábitos</string>
+    <string name="titulo_tareas">Tareas Por Hacer</string>
+    <string name="frase_dia">Frase del día:</string>
+
+    <string name="btn_otra_frase">🔄 Otra frase</string>
+    <string name="btn_ver_progreso">📊 Ver progreso</string>
+    <string name="btn_historial">📋 Historial de tareas</string>
+
+    <string name="agregar_tarea">Agregar Tarea</string>
+    <string name="editar_tarea">Editar Tarea</string>
+    <string name="confirmar_tarea">Confirmar Tarea</string>
+
+    <!-- Actividad Agregar Tarea -->
+    <string name="titulo_crear_tarea">Crear Tarea</string>
+    <string name="nombre_habito">Nombre de hábito</string>
+    <string name="detalles_habito">Detalles del hábito</string>
+    <string name="dias_titulo">Días</string>
+    <string name="alarma_titulo">Alarma</string>
+
+    <string name="btn_agregar_tarea">Agregar Tarea</string>
+    <string name="btn_cancelar_tarea">Cancelar Tarea</string>
+</resources>
