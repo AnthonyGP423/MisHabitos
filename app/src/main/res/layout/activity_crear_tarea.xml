@@ -40,11 +40,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/titulo_crear_tarea"
-            android:textSize="@dimen/texto_titulo"
-            android:textStyle="bold"
             android:layout_marginBottom="@dimen/separar_btn_top"
             android:textColor="@android:color/black"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+            style="@style/TituloPrincipal"/>
 
         <!-- Nombre del hábito -->
         <EditText

@@ -27,10 +27,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:fontFamily="sans-serif-black"
             android:text="@string/titulo_tareas"
             android:textColor="@color/gris_pizarra"
-            android:textSize="@dimen/texto_titulo" />
+            android:textSize="@dimen/texto_titulo"
+            style="@style/TituloPrincipal"/>
 
         <LinearLayout
             android:id="@+id/contenedor_tareas"
@@ -83,17 +83,8 @@
 
         <TextView
             android:id="@+id/texto_frase_dia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="@dimen/margen_frase_Del_dia"
-            android:layout_marginTop="12dp"
-            android:fontFamily="casual"
-            android:gravity="center"
-            android:text="@string/frase_dia"
-            android:textColor="@color/titulo_color"
-            android:textSize="@dimen/texto_subtitulo"
-            android:textStyle="bold" />
+            style="@style/FraseDelDiaStyle"
+            android:text="@string/frase_dia" />
 
 
         <LinearLayout

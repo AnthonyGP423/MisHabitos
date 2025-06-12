@@ -12,4 +12,18 @@
     <style name="EditText">
         <item name="android:textSize">@dimen/texto_normal</item>
     </style>
+
+
+    <style name="FraseDelDiaStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_margin">@dimen/margen_frase_Del_dia</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:fontFamily">casual</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/titulo_color</item>
+        <item name="android:textSize">@dimen/texto_subtitulo</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
