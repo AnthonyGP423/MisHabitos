@@ -13,9 +13,9 @@
         android:id="@+id/cardLogin"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="32dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="6dp"
+        android:layout_margin="@dimen/margin_card"
+        app:cardCornerRadius="@dimen/card_radius"
+        app:cardElevation="@dimen/card_elevation"
         app:cardBackgroundColor="@color/morado_claro"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -29,14 +29,11 @@
 
             <!-- Título -->
             <TextView
-                android:id="@+id/txtTitulo"
+                android:id="@+id/lblTitulo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Iniciar Sesión"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
-                android:fontFamily="casual"
+                android:text="@string/titulo_inicio_sesion"
+                style="@style/TituloLoginText"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -44,78 +41,65 @@
             <!-- Usuario -->
             <EditText
                 android:id="@+id/edtUsuario"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="usuario"
-                android:background="@drawable/borde_texto_naranja"
-                android:padding="12dp"
-                app:layout_constraintTop_toBottomOf="@id/txtTitulo"
+                android:hint="@string/sub_usuario"
+                style="@style/InputTexto"
+                app:layout_constraintTop_toBottomOf="@id/lblTitulo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="24dp" />
+                android:layout_marginTop="@dimen/margin_top_input_usuario" />
 
             <!-- Contraseña -->
             <EditText
                 android:id="@+id/edtContrasena"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:hint="contraseña"
+                android:hint="@string/sub_contrasena"
                 android:inputType="textPassword"
-                android:background="@drawable/borde_texto_naranja"
-                android:padding="12dp"
+                style="@style/InputTexto"
                 app:layout_constraintTop_toBottomOf="@id/edtUsuario"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="@dimen/margin_top_input_contrasena" />
 
             <!-- Texto de registro -->
             <TextView
                 android:id="@+id/txtRegistro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¿No tienes cuenta? "
-                android:textSize="12sp"
-                android:textColor="@color/black"
+                android:text="@string/texto_no_cuenta"
+                style="@style/TextoSecundario"
                 app:layout_constraintTop_toBottomOf="@id/edtContrasena"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="@dimen/margin_top_input_contrasena" />
 
             <TextView
                 android:id="@+id/txtRegistrate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Regístrate"
-                android:textSize="12sp"
-                android:textColor="@color/blue"
-                android:textStyle="bold"
+                android:text="@string/texto_registrate"
+                style="@style/TextoRegistroLink"
                 app:layout_constraintTop_toTopOf="@id/txtRegistro"
                 app:layout_constraintStart_toEndOf="@id/txtRegistro" />
 
             <!-- Botones de redes -->
             <ImageButton
                 android:id="@+id/btnGoogle"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/botton_rosado"
+                style="@style/BotonRedSocial"
                 android:src="@drawable/google_icon"
-                android:contentDescription="Google"
+                android:contentDescription="@string/icon_google"
                 app:layout_constraintTop_toBottomOf="@id/txtRegistro"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/margin_top_input_contrasena"
                 android:layout_marginEnd="8dp"/>
 
             <ImageButton
                 android:id="@+id/btnFacebook"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/botton_rosado"
+                style="@style/BotonRedSocial"
                 android:src="@drawable/facebook_icon"
-                android:contentDescription="Facebook"
+                android:contentDescription="@string/icon_facebook"
                 app:layout_constraintTop_toTopOf="@id/btnGoogle"
                 app:layout_constraintStart_toEndOf="@id/btnGoogle"
                 app:layout_constraintBottom_toBottomOf="@id/btnGoogle"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginStart="@dimen/margin_espaciado_redes"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
