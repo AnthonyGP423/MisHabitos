@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/imagensession"
+    tools:context=".InicioSession">
+
+    <!-- Fondo de tarjeta -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardLogin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_card"
+        app:cardCornerRadius="@dimen/card_radius"
+        app:cardElevation="@dimen/card_elevation"
+        app:cardBackgroundColor="@color/morado_claro"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <!-- Título -->
+            <TextView
+                android:id="@+id/lblTitulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/titulo_inicio_sesion"
+                style="@style/TituloLoginText"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Usuario -->
+            <EditText
+                android:id="@+id/edtUsuario"
+                android:hint="@string/sub_usuario"
+                style="@style/InputTexto"
+                app:layout_constraintTop_toBottomOf="@id/lblTitulo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/margin_top_input_usuario" />
+
+            <!-- Contraseña -->
+            <EditText
+                android:id="@+id/edtContrasena"
+                android:hint="@string/sub_contrasena"
+                android:inputType="textPassword"
+                style="@style/InputTexto"
+                app:layout_constraintTop_toBottomOf="@id/edtUsuario"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/margin_top_input_contrasena" />
+
+            <!-- Texto de registro -->
+            <TextView
+                android:id="@+id/txtRegistro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/texto_no_cuenta"
+                style="@style/TextoSecundario"
+                app:layout_constraintTop_toBottomOf="@id/edtContrasena"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="@dimen/margin_top_input_contrasena" />
+
+            <TextView
+                android:id="@+id/txtRegistrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/texto_registrate"
+                style="@style/TextoRegistroLink"
+                app:layout_constraintTop_toTopOf="@id/txtRegistro"
+                app:layout_constraintStart_toEndOf="@id/txtRegistro" />
+
+            <!-- Botones de redes -->
+            <ImageButton
+                android:id="@+id/btnGoogle"
+                style="@style/BotonRedSocial"
+                android:src="@drawable/google_icon"
+                android:contentDescription="@string/icon_google"
+                app:layout_constraintTop_toBottomOf="@id/txtRegistro"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="@dimen/margin_top_input_contrasena"
+                android:layout_marginEnd="8dp"/>
+
+            <ImageButton
+                android:id="@+id/btnFacebook"
+                style="@style/BotonRedSocial"
+                android:src="@drawable/facebook_icon"
+                android:contentDescription="@string/icon_facebook"
+                app:layout_constraintTop_toTopOf="@id/btnGoogle"
+                app:layout_constraintStart_toEndOf="@id/btnGoogle"
+                app:layout_constraintBottom_toBottomOf="@id/btnGoogle"
+                android:layout_marginStart="@dimen/margin_espaciado_redes"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,4 +24,15 @@
 
     <string name="btn_agregar_tarea">Agregar Tarea</string>
     <string name="btn_cancelar_tarea">Cancelar Tarea</string>
+
+
+    <!-- Actividad Inicio Session -->
+    <string name="titulo_inicio_sesion">Iniciar Sesión</string>
+    <string name="sub_usuario">usuario</string>
+    <string name="sub_contrasena">contraseña</string>
+    <string name="texto_no_cuenta">¿No tienes cuenta? </string>
+    <string name="texto_registrate">Regístrate</string>
+    <string name="icon_google">Google</string>
+    <string name="icon_facebook">Facebook</string>
+
 </resources>

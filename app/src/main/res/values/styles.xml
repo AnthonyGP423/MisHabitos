@@ -26,4 +26,35 @@
         <item name="android:textSize">@dimen/texto_subtitulo</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="TituloLoginText">
+        <item name="android:textSize">@dimen/texto_titulo</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">casual</item>
+    </style>
+
+    <style name="TextoSecundario">
+        <item name="android:textSize">@dimen/text_size_secundario</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextoRegistroLink">
+        <item name="android:textSize">@dimen/text_size_secundario</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="InputTexto">
+        <item name="android:background">@drawable/borde_texto_naranja</item>
+        <item name="android:padding">@dimen/padding_input</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="BotonRedSocial">
+        <item name="android:layout_width">@dimen/icon_size_red_social</item>
+        <item name="android:layout_height">@dimen/icon_size_red_social</item>
+        <item name="android:background">@drawable/botton_rosado</item>
+    </style>
 </resources>

@@ -138,6 +138,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_profile) {
             Toast.makeText(this, "Abriste Perfil", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, InicioSession.class);
+            startActivity(intent);
         } else if (id == R.id.nav_settings) {
             Toast.makeText(this, "Abriste Configuración", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_faq) {

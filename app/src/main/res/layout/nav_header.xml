@@ -16,7 +16,6 @@
             android:id="@+id/titulo_opciones"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="¡Hola @user!"
             android:textColor="@android:color/white"
             android:textSize="@dimen/texto_subtitulo"
             android:textStyle="bold" />

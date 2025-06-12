@@ -28,4 +28,9 @@
 
     <color name="aceptar_color">#90EE90</color>
     <color name="rechazar_color">#e62e1b</color>
+
+    <color name="crema_suave">#F5EDE7</color>
+    <color name="blue">#1976D2</color>
+
+
 </resources>
