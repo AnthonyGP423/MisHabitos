@@ -86,6 +86,20 @@
             android:id="@+id/texto_frase_dia"
             style="@style/FraseDelDiaStyle"
             android:text="@string/frase_dia" />
+        <TextView
+            android:id="@+id/frase_mostrada"
+            style="@style/FraseDelDiaStyle" />
+
+
+        <LinearLayout
+            android:id="@+id/layout_frases"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="2dp"
+            android:layout_marginBottom="8dp"
+            />
+
 
 
         <LinearLayout

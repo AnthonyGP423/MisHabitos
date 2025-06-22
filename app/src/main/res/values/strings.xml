@@ -6,7 +6,9 @@
     <string name="app_name">Mis Hábitos</string>
     <string name="titulo_tareas">Tareas Por Hacer</string>
     <string name="frase_dia">Frase del día:</string>
+    <string name="contenedor_frases">Frases</string>
 
+    
     <string name="btn_otra_frase">🔄 Otra frase</string>
     <string name="btn_ver_progreso">📊 Ver progreso</string>
     <string name="btn_historial">📋 Historial de tareas</string>

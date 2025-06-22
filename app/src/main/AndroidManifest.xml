@@ -17,10 +17,10 @@
         android:theme="@style/Theme.MisHabitos"
         tools:targetApi="31">
         <activity
-            android:name=".InicioSession"
+            android:name=".activities.InicioSession"
             android:exported="true" />
         <activity
-            android:name=".CrearTarea"
+            android:name=".activities.CrearTarea"
             android:exported="true" />
         <activity
             android:name=".MainActivity"

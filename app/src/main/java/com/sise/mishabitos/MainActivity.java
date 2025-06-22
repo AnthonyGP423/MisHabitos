@@ -2,7 +2,6 @@ package com.sise.mishabitos;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -18,40 +17,44 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.sise.mishabitos.entities.Frase;
-import com.sise.mishabitos.shared.BaseResponse;
-import com.sise.mishabitos.shared.Constants;
+import com.sise.mishabitos.activities.CrearTarea;
+import com.sise.mishabitos.activities.InicioSession;
+import com.sise.mishabitos.viewmodel.FraseViewModel;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
+    private FraseViewModel viewModel;
+    private LinearLayout layoutFrases;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView textoFraseDia = findViewById(R.id.texto_frase_dia);
+        // UI inicial
         Button btnOtraFrase = findViewById(R.id.btn_otra_frase);
-        FloatingActionButton botonAgregar = findViewById(R.id.btn_agregar_tarea);
+        layoutFrases = findViewById(R.id.layout_frases);
 
-        // ▶️ Llama a la función que obtiene la frase del backend
-        obtenerFraseDelServidor(textoFraseDia);
+        // ViewModel
+        viewModel = new ViewModelProvider(this).get(FraseViewModel.class);
 
-        btnOtraFrase.setOnClickListener(v -> obtenerFraseDelServidor(textoFraseDia));
+        // Observar cambios
+        viewModel.getFraseDelDia().observe(this, texto -> {
+            agregarFraseALista(texto);
+        });
+
+        // Primera carga
+        viewModel.cargarFrase(this);
+
+        // Botón para otra frase
+        btnOtraFrase.setOnClickListener(v -> viewModel.cargarFrase(this));
 
         // Menú lateral
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -93,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             contenedorTareas.addView(checkBox);
         }
 
+        // Botón flotante
+        FloatingActionButton botonAgregar = findViewById(R.id.btn_agregar_tarea);
         botonAgregar.setOnClickListener(v -> {
             Toast.makeText(this, "Agregar nueva tarea", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, CrearTarea.class);
@@ -100,36 +105,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    private void obtenerFraseDelServidor(TextView textoFraseDia) {
-        String url = Constants.BASE_URL_API + "/frases";
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        StringRequest request = new StringRequest(Request.Method.GET, url,
-                response -> {
-                    try {
-                        Gson gson = new Gson();
-                        // Usa TypeToken para deserializar un BaseResponse<Frase>
-                        Type tipoRespuesta = new TypeToken<BaseResponse<Frase>>(){}.getType();
-                        BaseResponse<Frase> baseResponse = gson.fromJson(response, tipoRespuesta);
-
-                        if (baseResponse != null && baseResponse.isSuccess() && baseResponse.getData() != null) {
-                            textoFraseDia.setText(baseResponse.getData().getFrase());
-                        } else {
-                            textoFraseDia.setText("No se pudo obtener la frase");
-                        }
-
-                    } catch (Exception e) {
-                        textoFraseDia.setText("Error al procesar la respuesta");
-                        e.printStackTrace();
-                    }
-                },
-                error -> {
-                    textoFraseDia.setText("Error al conectarse con el servidor");
-                    error.printStackTrace();
-                });
-
-        queue.add(request);
+    private void agregarFraseALista(String texto) {
+        TextView fraseMostrada = findViewById(R.id.frase_mostrada);
+        fraseMostrada.setText(texto);
     }
 
     @Override
@@ -137,9 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            Toast.makeText(this, "Abriste Perfil", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(MainActivity.this, InicioSession.class);
-            startActivity(intent);
+            startActivity(new Intent(this, InicioSession.class));
         } else if (id == R.id.nav_settings) {
             Toast.makeText(this, "Abriste Configuración", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_faq) {
