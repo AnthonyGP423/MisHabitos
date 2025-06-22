@@ -1,14 +1,15 @@
 package com.sise.mishabitos;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.CheckBox;
 import android.widget.Toast;
+import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -35,28 +36,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences preferences = getSharedPreferences("session", MODE_PRIVATE);
+        boolean isLoggedIn = preferences.getBoolean("isLoggedIn", false);
+        if (!isLoggedIn) {
+            startActivity(new Intent(this, InicioSession.class));
+            finish();
+            return;
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // UI inicial
+        inicializarUI();
+        configurarViewModel();
+        configurarMenuLateral();
+        cargarTareasEjemplo();
+        configurarBotonFlotante();
+    }
+
+    private void inicializarUI() {
         Button btnOtraFrase = findViewById(R.id.btn_otra_frase);
         layoutFrases = findViewById(R.id.layout_frases);
-
-        // ViewModel
-        viewModel = new ViewModelProvider(this).get(FraseViewModel.class);
-
-        // Observar cambios
-        viewModel.getFraseDelDia().observe(this, texto -> {
-            agregarFraseALista(texto);
-        });
-
-        // Primera carga
-        viewModel.cargarFrase(this);
-
-        // Botón para otra frase
         btnOtraFrase.setOnClickListener(v -> viewModel.cargarFrase(this));
+    }
 
-        // Menú lateral
+    private void configurarViewModel() {
+        viewModel = new ViewModelProvider(this).get(FraseViewModel.class);
+        viewModel.getFraseDelDia().observe(this, this::agregarFraseALista);
+        viewModel.cargarFrase(this);
+    }
+
+    private void configurarMenuLateral() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -70,8 +79,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
 
-        // Lista de tareas de prueba
+    private void cargarTareasEjemplo() {
         LinearLayout contenedorTareas = findViewById(R.id.contenedor_tareas);
         List<String> listaTareas = Arrays.asList("Tarea 1", "Tarea 2", "Tarea 3");
 
@@ -95,13 +105,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             contenedorTareas.addView(checkBox);
         }
+    }
 
-        // Botón flotante
+    private void configurarBotonFlotante() {
         FloatingActionButton botonAgregar = findViewById(R.id.btn_agregar_tarea);
         botonAgregar.setOnClickListener(v -> {
             Toast.makeText(this, "Agregar nueva tarea", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, CrearTarea.class);
-            startActivity(intent);
+            startActivity(new Intent(this, CrearTarea.class));
         });
     }
 

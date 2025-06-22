@@ -100,6 +100,17 @@
                 app:layout_constraintStart_toEndOf="@id/btnGoogle"
                 app:layout_constraintBottom_toBottomOf="@id/btnGoogle"
                 android:layout_marginStart="@dimen/margin_espaciado_redes"/>
+
+            <Button
+                android:id="@+id/btnIniciar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Iniciar Sesión"
+                app:layout_constraintTop_toBottomOf="@id/btnGoogle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="24dp"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
