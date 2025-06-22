@@ -21,16 +21,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.sise.mishabitos.activities.CrearTarea;
-import com.sise.mishabitos.activities.InicioSession;
-import com.sise.mishabitos.viewmodel.FraseViewModel;
+import com.sise.mishabitos.activities.CrearHabitoActivity;
+import com.sise.mishabitos.activities.LoginActivity;
+import com.sise.mishabitos.viewmodel.FraseMotivacionalViewModel;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private FraseViewModel viewModel;
+    private FraseMotivacionalViewModel viewModel;
     private LinearLayout layoutFrases;
 
     @Override
@@ -43,18 +43,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layoutFrases = findViewById(R.id.layout_frases);
 
         // ViewModel
-        viewModel = new ViewModelProvider(this).get(FraseViewModel.class);
+        viewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
 
         // Observar cambios
-        viewModel.getFraseDelDia().observe(this, texto -> {
-            agregarFraseALista(texto);
+        viewModel.getListarFrasesLiveData().observe(this, texto -> {
+            agregarFraseALista(texto.toString());
         });
 
         // Primera carga
-        viewModel.cargarFrase(this);
+        viewModel.listarFrases(this);
 
         // Botón para otra frase
-        btnOtraFrase.setOnClickListener(v -> viewModel.cargarFrase(this));
+        btnOtraFrase.setOnClickListener(v -> viewModel.listarFrases(this));
 
         // Menú lateral
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FloatingActionButton botonAgregar = findViewById(R.id.btn_agregar_tarea);
         botonAgregar.setOnClickListener(v -> {
             Toast.makeText(this, "Agregar nueva tarea", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, CrearTarea.class);
+            Intent intent = new Intent(this, CrearHabitoActivity.class);
             startActivity(intent);
         });
     }
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            startActivity(new Intent(this, InicioSession.class));
+            startActivity(new Intent(this, LoginActivity.class));
         } else if (id == R.id.nav_settings) {
             Toast.makeText(this, "Abriste Configuración", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_faq) {
