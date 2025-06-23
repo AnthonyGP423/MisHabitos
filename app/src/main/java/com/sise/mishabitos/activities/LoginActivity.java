@@ -28,7 +28,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InicioSession extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     private EditText edtUsuario, edtContrasena;
     private Button btnIniciar;
@@ -37,7 +37,7 @@ public class InicioSession extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_inicio_session);
+        setContentView(R.layout.activity_login);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -90,7 +90,7 @@ public class InicioSession extends AppCompatActivity {
                             editor.apply();
 
                             Toast.makeText(this, "Bienvenido, " + nombre, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(InicioSession.this, MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish(); 
                         } else {

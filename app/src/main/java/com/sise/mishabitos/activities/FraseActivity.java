@@ -9,11 +9,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.sise.mishabitos.R;
+import com.sise.mishabitos.viewmodel.FraseMotivacionalViewModel;
 import com.sise.mishabitos.viewmodel.FraseViewModel;
 
 public class FraseActivity extends AppCompatActivity {
 
-    private FraseViewModel viewModel;
+    private FraseMotivacionalViewModel viewModel;
     private LinearLayout layoutFrases;
 
     @Override
@@ -24,17 +25,17 @@ public class FraseActivity extends AppCompatActivity {
         layoutFrases = findViewById(R.id.layout_frases);
         Button btnOtra = findViewById(R.id.btn_otra_frase);
 
-        viewModel = new ViewModelProvider(this).get(FraseViewModel.class);
+        viewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
 
-        viewModel.getFraseDelDia().observe(this, texto -> {
-            agregarFraseALista(texto);
+        viewModel.getListarFrasesLiveData().observe(this, texto -> {
+            agregarFraseALista(texto.toString());
         });
 
         // Carga inicial
-        viewModel.cargarFrase(this);
+        viewModel.listarFrases(this);
 
         // Botón
-        btnOtra.setOnClickListener(v -> viewModel.cargarFrase(this));
+        btnOtra.setOnClickListener(v -> viewModel.listarFrases(this));
     }
 
     private void agregarFraseALista(String texto) {

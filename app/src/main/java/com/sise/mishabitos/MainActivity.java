@@ -23,7 +23,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.sise.mishabitos.activities.CrearTarea;
-import com.sise.mishabitos.activities.InicioSession;
 import com.sise.mishabitos.viewmodel.FraseViewModel;
 
 import java.util.Arrays;

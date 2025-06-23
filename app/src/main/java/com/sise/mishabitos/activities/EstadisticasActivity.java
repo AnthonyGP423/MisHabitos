@@ -13,28 +13,17 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.sise.mishabitos.R;
 
-public class CrearTarea extends AppCompatActivity {
+public class EstadisticasActivity extends AppCompatActivity {
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_crear_tarea);
-
+        setContentView(R.layout.activity_estadisticas);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
-
-        // Esto cierra el Activity actual y vuelve al anterior
-        Button btnCancelarTarea = findViewById(R.id.btnCancelarTarea);
-        btnCancelarTarea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
         });
     }
 }
