@@ -1,14 +1,15 @@
 package com.sise.mishabitos;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.CheckBox;
 import android.widget.Toast;
+import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -21,42 +22,49 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.sise.mishabitos.activities.CrearHabitoActivity;
-import com.sise.mishabitos.activities.LoginActivity;
-import com.sise.mishabitos.viewmodel.FraseMotivacionalViewModel;
+import com.sise.mishabitos.activities.CrearTarea;
+import com.sise.mishabitos.viewmodel.FraseViewModel;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private FraseMotivacionalViewModel viewModel;
+    private FraseViewModel viewModel;
     private LinearLayout layoutFrases;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences preferences = getSharedPreferences("session", MODE_PRIVATE);
+        boolean isLoggedIn = preferences.getBoolean("isLoggedIn", false);
+        if (!isLoggedIn) {
+            startActivity(new Intent(this, InicioSession.class));
+            finish();
+            return;
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // UI inicial
+        inicializarUI();
+        configurarViewModel();
+        configurarMenuLateral();
+        cargarTareasEjemplo();
+        configurarBotonFlotante();
+    }
+
+    private void inicializarUI() {
         Button btnOtraFrase = findViewById(R.id.btn_otra_frase);
         layoutFrases = findViewById(R.id.layout_frases);
+        btnOtraFrase.setOnClickListener(v -> viewModel.cargarFrase(this));
+    }
 
-        // ViewModel
-        viewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
+    private void configurarViewModel() {
+        viewModel = new ViewModelProvider(this).get(FraseViewModel.class);
+        viewModel.getFraseDelDia().observe(this, this::agregarFraseALista);
+        viewModel.cargarFrase(this);
+    }
 
-        // Observar cambios
-        viewModel.getListarFrasesLiveData().observe(this, texto -> {
-            agregarFraseALista(texto.toString());
-        });
-
-        // Primera carga
-        viewModel.listarFrases(this);
-
-        // Botón para otra frase
-        btnOtraFrase.setOnClickListener(v -> viewModel.listarFrases(this));
-
-        // Menú lateral
+    private void configurarMenuLateral() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -70,8 +78,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
 
-        // Lista de tareas de prueba
+    private void cargarTareasEjemplo() {
         LinearLayout contenedorTareas = findViewById(R.id.contenedor_tareas);
         List<String> listaTareas = Arrays.asList("Tarea 1", "Tarea 2", "Tarea 3");
 
@@ -95,13 +104,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             contenedorTareas.addView(checkBox);
         }
+    }
 
-        // Botón flotante
+    private void configurarBotonFlotante() {
         FloatingActionButton botonAgregar = findViewById(R.id.btn_agregar_tarea);
         botonAgregar.setOnClickListener(v -> {
             Toast.makeText(this, "Agregar nueva tarea", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, CrearHabitoActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(this, CrearTarea.class));
         });
     }
 
@@ -115,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, InicioSession.class));
         } else if (id == R.id.nav_settings) {
             Toast.makeText(this, "Abriste Configuración", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_faq) {
