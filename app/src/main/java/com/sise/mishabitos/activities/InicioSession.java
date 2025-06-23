@@ -83,18 +83,16 @@ public class InicioSession extends AppCompatActivity {
                         if (success) {
                             String nombre = response.getJSONObject("data").getString("nombre");
 
-                            // ✅ Guardar sesión
                             SharedPreferences preferences = getSharedPreferences("session", MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putBoolean("isLoggedIn", true);
                             editor.putString("nombre", nombre); // opcional
                             editor.apply();
 
-                            // ✅ Redirigir al MainActivity
                             Toast.makeText(this, "Bienvenido, " + nombre, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(InicioSession.this, MainActivity.class);
                             startActivity(intent);
-                            finish(); // no permite volver al login con el botón "atrás"
+                            finish(); 
                         } else {
                             Toast.makeText(this, response.getString("message"), Toast.LENGTH_SHORT).show();
                         }
