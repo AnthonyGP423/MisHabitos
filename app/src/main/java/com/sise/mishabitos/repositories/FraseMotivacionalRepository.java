@@ -95,7 +95,7 @@ public class FraseMotivacionalRepository {
     }
 
     public void actualizarFraseMotivacional(Context context, FraseMotivacional frase, Callback<String> callback) {
-        String url = Constants.BASE_URL_API + "/frases/" + frase.getIdFrase(); // Asegúrate de que `FraseMotivacional` tenga un `id`
+        String url = Constants.BASE_URL_API + Constants.ENDPOINT_FRASE_MOTIVACIONAL + frase.getIdFrase(); // Asegúrate de que `FraseMotivacional` tenga un `id`
         RequestQueue queue = Volley.newRequestQueue(context);
 
         Gson gson = new Gson();

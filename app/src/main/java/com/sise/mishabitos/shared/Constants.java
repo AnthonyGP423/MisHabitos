@@ -1,9 +1,9 @@
 package com.sise.mishabitos.shared;
 
 public class Constants {
-    public static String BASE_URL_API = "http://localhost:3000/api/v1";
+    public static String BASE_URL_API = "http://192.168.18.9:3000/api/v1";
     public static String ENDPOINT_CATEGORIA = "/categoria";
-    public static String ENDPOINT_FRASE_MOTIVACIONAL = "/fraseMotivacional";
+    public static String ENDPOINT_FRASE_MOTIVACIONAL = "/frases";
     public static String ENDPOINT_FRECUENCIA_HABITO = "/frecuenciaHabito";
     public static String ENDPOINT_HABITO_INSIGNIA = "/habitoInsignia";
     public static String ENDPOINT_HABITO = "/habito";

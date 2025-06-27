@@ -22,15 +22,16 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.sise.mishabitos.activities.CrearTarea;
-import com.sise.mishabitos.viewmodel.FraseViewModel;
+import com.sise.mishabitos.activities.CrearHabitoActivity;
+import com.sise.mishabitos.activities.LoginActivity;
+import com.sise.mishabitos.viewmodel.FraseMotivacionalViewModel;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private FraseViewModel viewModel;
+    private FraseMotivacionalViewModel viewModel;
     private LinearLayout layoutFrases;
 
     @Override
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences preferences = getSharedPreferences("session", MODE_PRIVATE);
         boolean isLoggedIn = preferences.getBoolean("isLoggedIn", false);
         if (!isLoggedIn) {
-            startActivity(new Intent(this, InicioSession.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
         }
@@ -55,14 +56,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void inicializarUI() {
         Button btnOtraFrase = findViewById(R.id.btn_otra_frase);
         layoutFrases = findViewById(R.id.layout_frases);
-        btnOtraFrase.setOnClickListener(v -> viewModel.cargarFrase(this));
+        btnOtraFrase.setOnClickListener(v -> viewModel.listarFrases(this));
     }
 
-    private void configurarViewModel() {
-        viewModel = new ViewModelProvider(this).get(FraseViewModel.class);
-        viewModel.getFraseDelDia().observe(this, this::agregarFraseALista);
-        viewModel.cargarFrase(this);
-    }
+   private void configurarViewModel() {
+     viewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
+
+       viewModel.getFraseDelDiaLiveData().observe(this, this::agregarFraseALista);
+     viewModel.listarFrases(this);}
+
 
     private void configurarMenuLateral() {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FloatingActionButton botonAgregar = findViewById(R.id.btn_agregar_tarea);
         botonAgregar.setOnClickListener(v -> {
             Toast.makeText(this, "Agregar nueva tarea", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, CrearTarea.class));
+            startActivity(new Intent(this, CrearHabitoActivity.class));
         });
     }
 
@@ -124,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            startActivity(new Intent(this, InicioSession.class));
+            startActivity(new Intent(this, LoginActivity.class));
         } else if (id == R.id.nav_settings) {
             Toast.makeText(this, "Abriste Configuración", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_faq) {

@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.sise.mishabitos.R;
 import com.sise.mishabitos.viewmodel.FraseMotivacionalViewModel;
-import com.sise.mishabitos.viewmodel.FraseViewModel;
 
 public class FraseActivity extends AppCompatActivity {
 
@@ -27,7 +26,7 @@ public class FraseActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
 
-        viewModel.getListarFrasesLiveData().observe(this, texto -> {
+        viewModel.getFraseDelDiaLiveData().observe(this, texto -> {
             agregarFraseALista(texto.toString());
         });
 

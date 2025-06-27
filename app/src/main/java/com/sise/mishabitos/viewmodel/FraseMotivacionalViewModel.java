@@ -23,8 +23,10 @@ public class FraseMotivacionalViewModel extends ViewModel {
     private final FraseMotivacionalRepository repository = new FraseMotivacionalRepository();
 
     // Getters para LiveData
-    public LiveData<LiveDataResponse<List<FraseMotivacional>>> getListarFrasesLiveData() {
-        return listarFrasesLiveData;
+    private final MutableLiveData<String> fraseDelDiaLiveData = new MutableLiveData<>();
+
+    public LiveData<String> getFraseDelDiaLiveData() {
+        return fraseDelDiaLiveData;
     }
 
     public LiveData<LiveDataResponse<Boolean>> getInsertarFraseLiveData() {
@@ -44,18 +46,15 @@ public class FraseMotivacionalViewModel extends ViewModel {
         repository.listarFraseMotivacional(context, new Callback<String>() {
             @Override
             public void onSuccess(String result) {
-                FraseMotivacional frase = new FraseMotivacional();
-                frase.setFrase(result);
-                listarFrasesLiveData.postValue(LiveDataResponse.success(List.of(frase)));
+                fraseDelDiaLiveData.postValue(result); // ✅ SOLO esto para mostrar frase
             }
 
             @Override
             public void onFailure() {
-                listarFrasesLiveData.postValue(LiveDataResponse.error());
+                fraseDelDiaLiveData.postValue("No se pudo obtener frase 😓");
             }
         });
     }
-
     public void insertarFrase(Context context, FraseMotivacional frase) {
         repository.insertarFraseMotivacional(context, frase, new Callback<String>() {
             @Override
