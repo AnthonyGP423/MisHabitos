@@ -3,7 +3,6 @@ package com.sise.mishabitos.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,9 +17,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.sise.mishabitos.MainActivity;
 import com.sise.mishabitos.R;
 import com.sise.mishabitos.shared.Constants;
+import com.sise.mishabitos.utils.SharedPreferencesManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Referencias
         edtUsuario = findViewById(R.id.edtUsuario);
         edtContrasena = findViewById(R.id.edtContrasena);
         btnIniciar = findViewById(R.id.btnIniciar);
@@ -62,12 +60,12 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        String url = Constants.BASE_URL_API + "/auth";
+        String url = Constants.BASE_URL_API + "/auth/login";
 
         JSONObject body = new JSONObject();
         try {
             body.put("correo", correo);
-            body.put("contrasena", contrasena);
+            body.put("password", contrasena);
         } catch (JSONException e) {
             e.printStackTrace();
             return;
@@ -81,7 +79,11 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         boolean success = response.getBoolean("success");
                         if (success) {
-                            String nombre = response.getJSONObject("data").getString("nombre");
+                            JSONObject data = response.getJSONObject("data");
+                            String nombre = data.getJSONObject("usuario").getString("correo");
+                            String token = data.getString("token");
+
+                            SharedPreferencesManager.getInstance(this).saveToken(token);
 
                             SharedPreferences preferences = getSharedPreferences("session", MODE_PRIVATE);
                             SharedPreferences.Editor editor = preferences.edit();
@@ -92,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(this, "Bienvenido, " + nombre, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
-                            finish(); 
+                            finish();
                         } else {
                             Toast.makeText(this, response.getString("message"), Toast.LENGTH_SHORT).show();
                         }
