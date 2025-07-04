@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (success) {
                             JSONObject data = response.getJSONObject("data");
                             String nombre = data.getJSONObject("usuario").getString("correo");
+                            int idUsuario = data.getJSONObject("usuario").getInt("idUsuario");
                             String token = data.getString("token");
 
                             SharedPreferencesManager.getInstance(this).saveToken(token);
@@ -89,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                             SharedPreferences.Editor editor = preferences.edit();
                             editor.putBoolean("isLoggedIn", true);
                             editor.putString("nombre", nombre); // opcional
+                            editor.putInt("idUsuario", idUsuario);
                             editor.apply();
 
                             Toast.makeText(this, "Bienvenido, " + nombre, Toast.LENGTH_LONG).show();
