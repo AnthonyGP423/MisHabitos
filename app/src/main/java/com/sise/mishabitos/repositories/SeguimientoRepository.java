@@ -1,200 +1,130 @@
-package com.sise.mishabitos.repositories;
+package com.sise.mishabitos.viewmodel;
 
 import android.content.Context;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.sise.mishabitos.entities.Seguimiento;
-import com.sise.mishabitos.shared.BaseResponse;
-import com.sise.mishabitos.shared.Callback;
-import com.sise.mishabitos.shared.Constants;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
-import java.lang.reflect.Type;
+import com.sise.mishabitos.entities.Seguimiento;
+import com.sise.mishabitos.repositories.SeguimientoRepository;
+import com.sise.mishabitos.shared.Callback;
+import com.sise.mishabitos.shared.LiveDataResponse;
+
 import java.util.List;
 
-public class SeguimientoRepository {
+public class SeguimientoViewModel extends ViewModel {
 
-    public void listarSeguimientosPorHabito(Context context, int idHabito, Callback<List<Seguimiento>> callback) {
-        String url = Constants.BASE_URL_API + "/seguimientos/habito/" + idHabito;
-        RequestQueue queue = Volley.newRequestQueue(context);
+    private final MutableLiveData<LiveDataResponse<List<Seguimiento>>> listarSeguimientosPorHabitoLiveData;
+    private final MutableLiveData<LiveDataResponse<List<Seguimiento>>> listarSeguimientosPorUsuarioFechaLiveData;
+    private final MutableLiveData<LiveDataResponse<String>> insertarSeguimientoLiveData;
+    private final MutableLiveData<LiveDataResponse<String>> actualizarSeguimientoLiveData;
+    private final MutableLiveData<LiveDataResponse<String>> eliminarSeguimientoLiveData;
 
-        StringRequest request = new StringRequest(Request.Method.GET, url,
-                response -> {
-                    try {
-                        Type type = new TypeToken<BaseResponse<List<Seguimiento>>>() {}.getType();
-                        BaseResponse<List<Seguimiento>> baseResponse = new Gson().fromJson(response, type);
+    private final SeguimientoRepository seguimientoRepository;
 
-                        if (baseResponse != null && baseResponse.isSuccess()) {
-                            callback.onSuccess(baseResponse.getData());
-                        } else {
-                            callback.onFailure();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        callback.onFailure();
-                    }
-                },
-                error -> {
-                    error.printStackTrace();
-                    callback.onFailure();
-                });
-
-        queue.add(request);
+    public SeguimientoViewModel() {
+        listarSeguimientosPorHabitoLiveData = new MutableLiveData<>();
+        listarSeguimientosPorUsuarioFechaLiveData = new MutableLiveData<>();
+        insertarSeguimientoLiveData = new MutableLiveData<>();
+        actualizarSeguimientoLiveData = new MutableLiveData<>();
+        eliminarSeguimientoLiveData = new MutableLiveData<>();
+        seguimientoRepository = new SeguimientoRepository();
     }
 
-    // 🚀 NUEVO: Listar por usuario y fecha
-    public void listarSeguimientosPorUsuarioYFecha(Context context, int idUsuario, String fecha, Callback<List<Seguimiento>> callback) {
-        String url = Constants.BASE_URL_API + "/seguimientos/usuario/" + idUsuario + "/" + fecha;
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        StringRequest request = new StringRequest(Request.Method.GET, url,
-                response -> {
-                    try {
-                        Type type = new TypeToken<BaseResponse<List<Seguimiento>>>() {}.getType();
-                        BaseResponse<List<Seguimiento>> baseResponse = new Gson().fromJson(response, type);
-
-                        if (baseResponse != null && baseResponse.isSuccess()) {
-                            callback.onSuccess(baseResponse.getData());
-                        } else {
-                            callback.onFailure();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        callback.onFailure();
-                    }
-                },
-                error -> {
-                    error.printStackTrace();
-                    callback.onFailure();
-                });
-
-        queue.add(request);
+    public LiveData<LiveDataResponse<List<Seguimiento>>> getListarSeguimientosPorHabitoLiveData() {
+        return listarSeguimientosPorHabitoLiveData;
     }
 
-    public void insertarSeguimiento(Context context, Seguimiento seguimiento, Callback<String> callback) {
-        String url = Constants.BASE_URL_API + "/seguimientos";
-        RequestQueue queue = Volley.newRequestQueue(context);
+    public LiveData<LiveDataResponse<List<Seguimiento>>> getListarSeguimientosPorUsuarioFechaLiveData() {
+        return listarSeguimientosPorUsuarioFechaLiveData;
+    }
 
-        Gson gson = new Gson();
-        String jsonBody = gson.toJson(seguimiento);
+    public LiveData<LiveDataResponse<String>> getInsertarSeguimientoLiveData() {
+        return insertarSeguimientoLiveData;
+    }
 
-        StringRequest request = new StringRequest(Request.Method.POST, url,
-                response -> {
-                    try {
-                        Type type = new TypeToken<BaseResponse<String>>() {}.getType();
-                        BaseResponse<String> baseResponse = gson.fromJson(response, type);
+    public LiveData<LiveDataResponse<String>> getActualizarSeguimientoLiveData() {
+        return actualizarSeguimientoLiveData;
+    }
 
-                        if (baseResponse != null && baseResponse.isSuccess()) {
-                            callback.onSuccess("Seguimiento registrado correctamente");
-                        } else {
-                            callback.onFailure();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        callback.onFailure();
-                    }
-                },
-                error -> {
-                    error.printStackTrace();
-                    callback.onFailure();
-                }) {
+    public LiveData<LiveDataResponse<String>> getEliminarSeguimientoLiveData() {
+        return eliminarSeguimientoLiveData;
+    }
 
+    // 🔵 LISTAR POR HÁBITO
+    public void listarSeguimientosPorHabito(Context context, int idHabito) {
+        seguimientoRepository.listarSeguimientosPorHabito(context, idHabito, new Callback<List<Seguimiento>>() {
             @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
+            public void onSuccess(List<Seguimiento> result) {
+                listarSeguimientosPorHabitoLiveData.postValue(LiveDataResponse.success(result));
             }
 
             @Override
-            public byte[] getBody() {
-                try {
-                    return jsonBody.getBytes("utf-8");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
+            public void onFailure() {
+                listarSeguimientosPorHabitoLiveData.postValue(LiveDataResponse.error());
             }
-        };
-
-        queue.add(request);
+        });
     }
 
-    public void actualizarSeguimiento(Context context, Seguimiento seguimiento, Callback<String> callback) {
-        String url = Constants.BASE_URL_API + "/seguimientos/" + seguimiento.getIdSeguimiento();
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        Gson gson = new Gson();
-        String jsonBody = gson.toJson(seguimiento);
-
-        StringRequest request = new StringRequest(Request.Method.PUT, url,
-                response -> {
-                    try {
-                        Type tipo = new TypeToken<BaseResponse<String>>() {}.getType();
-                        BaseResponse<String> baseResponse = gson.fromJson(response, tipo);
-
-                        if (baseResponse != null && baseResponse.isSuccess()) {
-                            callback.onSuccess("Seguimiento actualizado correctamente");
-                        } else {
-                            callback.onFailure();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        callback.onFailure();
-                    }
-                },
-                error -> {
-                    error.printStackTrace();
-                    callback.onFailure();
-                }) {
-
+    // 🔵 LISTAR POR USUARIO Y FECHA (usa SharedPreferencesManager)
+    public void listarSeguimientosPorUsuarioYFecha(Context context, String fecha) {
+        seguimientoRepository.listarSeguimientosPorUsuarioYFecha(context, fecha, new Callback<List<Seguimiento>>() {
             @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
+            public void onSuccess(List<Seguimiento> result) {
+                listarSeguimientosPorUsuarioFechaLiveData.postValue(LiveDataResponse.success(result));
             }
 
             @Override
-            public byte[] getBody() {
-                try {
-                    return jsonBody.getBytes("utf-8");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return null;
-                }
+            public void onFailure() {
+                listarSeguimientosPorUsuarioFechaLiveData.postValue(LiveDataResponse.error());
             }
-        };
-
-        queue.add(request);
+        });
     }
 
-    public void eliminarSeguimiento(Context context, int idSeguimiento, Callback<String> callback) {
-        String url = Constants.BASE_URL_API + "/seguimientos/" + idSeguimiento;
-        RequestQueue queue = Volley.newRequestQueue(context);
+    // 🔵 INSERTAR
+    public void insertarSeguimiento(Context context, Seguimiento seguimiento) {
+        seguimientoRepository.insertarSeguimiento(context, seguimiento, new Callback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                insertarSeguimientoLiveData.postValue(LiveDataResponse.success(result));
+            }
 
-        StringRequest request = new StringRequest(Request.Method.DELETE, url,
-                response -> {
-                    try {
-                        Type tipo = new TypeToken<BaseResponse<String>>() {}.getType();
-                        BaseResponse<String> baseResponse = new Gson().fromJson(response, tipo);
+            @Override
+            public void onFailure() {
+                insertarSeguimientoLiveData.postValue(LiveDataResponse.error());
+            }
+        });
+    }
 
-                        if (baseResponse != null && baseResponse.isSuccess()) {
-                            callback.onSuccess("Seguimiento eliminado correctamente");
-                        } else {
-                            callback.onFailure();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        callback.onFailure();
-                    }
-                },
-                error -> {
-                    error.printStackTrace();
-                    callback.onFailure();
-                });
+    // 🔵 ACTUALIZAR
+    public void actualizarSeguimiento(Context context, Seguimiento seguimiento) {
+        seguimientoRepository.actualizarSeguimiento(context, seguimiento, new Callback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                actualizarSeguimientoLiveData.postValue(LiveDataResponse.success(result));
+            }
 
-        queue.add(request);
+            @Override
+            public void onFailure() {
+                actualizarSeguimientoLiveData.postValue(LiveDataResponse.error());
+            }
+        });
+    }
+
+    // 🔵 ELIMINAR
+    public void eliminarSeguimiento(Context context, int idSeguimiento) {
+        seguimientoRepository.eliminarSeguimiento(context, idSeguimiento, new Callback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                eliminarSeguimientoLiveData.postValue(LiveDataResponse.success(result));
+            }
+
+            @Override
+            public void onFailure() {
+                eliminarSeguimientoLiveData.postValue(LiveDataResponse.error());
+            }
+        });
     }
 
 }

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,10 +17,7 @@
             android:background="@color/azulado"
             android:paddingTop="15dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:title="@string/app_name"
-            />
-
-
+            app:title="@string/app_name" />
 
         <TextView
             android:layout_marginTop="@dimen/separar_btn_top"
@@ -31,17 +27,19 @@
             android:text="@string/titulo_tareas"
             android:textColor="@color/gris_pizarra"
             android:textSize="@dimen/texto_titulo"
-            style="@style/TituloPrincipal"/>
+            style="@style/TituloPrincipal" />
 
-        <LinearLayout
-            android:id="@+id/contenedor_tareas"
+        <!-- RecyclerView para mostrar lista de hábitos -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_habitos"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/heith_contenedor_tareas"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_margin="@dimen/margen_contenedor_tareas"
             android:background="@color/pizarron"
-            android:orientation="vertical"
             android:padding="16dp" />
 
+        <!-- Botones flotantes -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,11 +54,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/agregar_tarea"
                 android:src="@android:drawable/ic_input_add"
-                app:backgroundTint="@color/azulado"
-                app:layout_constraintTop_toBottomOf="@+id/texto_frase_dia" />
-
-            />
-
+                app:backgroundTint="@color/azulado" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btn_editar"
@@ -82,14 +76,15 @@
 
         </LinearLayout>
 
+        <!-- Frase del día -->
         <TextView
             android:id="@+id/texto_frase_dia"
             style="@style/FraseDelDiaStyle"
             android:text="@string/frase_dia" />
+
         <TextView
             android:id="@+id/frase_mostrada"
             style="@style/FraseDelDiaStyle" />
-
 
         <LinearLayout
             android:id="@+id/layout_frases"
@@ -97,10 +92,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="2dp"
-            android:layout_marginBottom="8dp"
-            />
-
-
+            android:layout_marginBottom="8dp" />
 
         <LinearLayout
             android:id="@+id/contenedor_botones"
@@ -116,11 +108,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/separar_btn_top"
-                app:layout_constraintTop_toBottomOf="@+id/contenedor_botones"                android:background="@drawable/redondear_button"
+                android:background="@drawable/redondear_button"
                 android:text="@string/btn_otra_frase"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                app:backgroundTint="@color/gris_pizarra"/>
+                app:backgroundTint="@color/gris_pizarra" />
 
             <Button
                 android:id="@+id/btn_ver_progreso"
@@ -131,20 +123,18 @@
                 android:text="@string/btn_ver_progreso"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                app:backgroundTint="@color/naranjal"
-                app:layout_constraintTop_toBottomOf="@+id/btn_otra_frase"/>
+                app:backgroundTint="@color/naranjal" />
 
             <Button
                 android:id="@+id/btn_historial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/redondear_button_morado"
                 android:layout_marginBottom="@dimen/separar_btn_top"
+                android:background="@drawable/redondear_button_morado"
                 android:text="@string/btn_historial"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                app:backgroundTint="@color/violeta"
-                app:layout_constraintTop_toBottomOf="@+id/btn_otra_frase"/>
+                app:backgroundTint="@color/violeta" />
 
         </LinearLayout>
 
@@ -157,4 +147,5 @@
         android:layout_gravity="start"
         app:menu="@menu/drawer_menu"
         app:headerLayout="@layout/nav_header" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

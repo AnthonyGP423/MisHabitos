@@ -15,13 +15,13 @@ import java.util.List;
 
 public class SeguimientoViewModel extends ViewModel {
 
-    private MutableLiveData<LiveDataResponse<List<Seguimiento>>> listarSeguimientosPorHabitoLiveData;
-    private MutableLiveData<LiveDataResponse<List<Seguimiento>>> listarSeguimientosPorUsuarioFechaLiveData;
-    private MutableLiveData<LiveDataResponse<String>> insertarSeguimientoLiveData;
-    private MutableLiveData<LiveDataResponse<String>> actualizarSeguimientoLiveData;
-    private MutableLiveData<LiveDataResponse<String>> eliminarSeguimientoLiveData;
+    private final MutableLiveData<LiveDataResponse<List<Seguimiento>>> listarSeguimientosPorHabitoLiveData;
+    private final MutableLiveData<LiveDataResponse<List<Seguimiento>>> listarSeguimientosPorUsuarioFechaLiveData;
+    private final MutableLiveData<LiveDataResponse<String>> insertarSeguimientoLiveData;
+    private final MutableLiveData<LiveDataResponse<String>> actualizarSeguimientoLiveData;
+    private final MutableLiveData<LiveDataResponse<String>> eliminarSeguimientoLiveData;
 
-    private SeguimientoRepository seguimientoRepository;
+    private final SeguimientoRepository seguimientoRepository;
 
     public SeguimientoViewModel() {
         listarSeguimientosPorHabitoLiveData = new MutableLiveData<>();
@@ -31,8 +31,6 @@ public class SeguimientoViewModel extends ViewModel {
         eliminarSeguimientoLiveData = new MutableLiveData<>();
         seguimientoRepository = new SeguimientoRepository();
     }
-
-    // 📌 GETTERS
 
     public LiveData<LiveDataResponse<List<Seguimiento>>> getListarSeguimientosPorHabitoLiveData() {
         return listarSeguimientosPorHabitoLiveData;
@@ -54,8 +52,7 @@ public class SeguimientoViewModel extends ViewModel {
         return eliminarSeguimientoLiveData;
     }
 
-    // 📌 LISTAR POR HÁBITO
-
+    // 🔵 LISTAR POR HÁBITO
     public void listarSeguimientosPorHabito(Context context, int idHabito) {
         seguimientoRepository.listarSeguimientosPorHabito(context, idHabito, new Callback<List<Seguimiento>>() {
             @Override
@@ -70,10 +67,9 @@ public class SeguimientoViewModel extends ViewModel {
         });
     }
 
-    // 📌 LISTAR POR USUARIO Y FECHA
-
-    public void listarSeguimientosPorUsuarioYFecha(Context context, int idUsuario, String fecha) {
-        seguimientoRepository.listarSeguimientosPorUsuarioYFecha(context, idUsuario, fecha, new Callback<List<Seguimiento>>() {
+    // 🔵 LISTAR POR USUARIO Y FECHA (usa SharedPreferencesManager)
+    public void listarSeguimientosPorUsuarioYFecha(Context context, String fecha) {
+        seguimientoRepository.listarSeguimientosPorUsuarioYFecha(context, fecha, new Callback<List<Seguimiento>>() {
             @Override
             public void onSuccess(List<Seguimiento> result) {
                 listarSeguimientosPorUsuarioFechaLiveData.postValue(LiveDataResponse.success(result));
@@ -86,8 +82,7 @@ public class SeguimientoViewModel extends ViewModel {
         });
     }
 
-    // 📌 INSERTAR
-
+    // 🔵 INSERTAR
     public void insertarSeguimiento(Context context, Seguimiento seguimiento) {
         seguimientoRepository.insertarSeguimiento(context, seguimiento, new Callback<String>() {
             @Override
@@ -102,8 +97,7 @@ public class SeguimientoViewModel extends ViewModel {
         });
     }
 
-    // 📌 ACTUALIZAR
-
+    // 🔵 ACTUALIZAR
     public void actualizarSeguimiento(Context context, Seguimiento seguimiento) {
         seguimientoRepository.actualizarSeguimiento(context, seguimiento, new Callback<String>() {
             @Override
@@ -118,8 +112,7 @@ public class SeguimientoViewModel extends ViewModel {
         });
     }
 
-    // 📌 ELIMINAR
-
+    // 🔵 ELIMINAR
     public void eliminarSeguimiento(Context context, int idSeguimiento) {
         seguimientoRepository.eliminarSeguimiento(context, idSeguimiento, new Callback<String>() {
             @Override
@@ -133,4 +126,5 @@ public class SeguimientoViewModel extends ViewModel {
             }
         });
     }
+
 }

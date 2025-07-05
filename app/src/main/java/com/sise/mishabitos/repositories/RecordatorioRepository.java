@@ -12,10 +12,13 @@ import com.sise.mishabitos.entities.Recordatorio;
 import com.sise.mishabitos.shared.BaseResponse;
 import com.sise.mishabitos.shared.Callback;
 import com.sise.mishabitos.shared.Constants;
+import com.sise.mishabitos.shared.SharedPreferencesManager;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecordatorioRepository {
 
@@ -43,7 +46,15 @@ public class RecordatorioRepository {
                 error -> {
                     error.printStackTrace();
                     callback.onFailure();
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
 
         queue.add(request);
     }
@@ -77,6 +88,7 @@ public class RecordatorioRepository {
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
             }
+
             @Override
             public byte[] getBody() {
                 try {
@@ -85,6 +97,15 @@ public class RecordatorioRepository {
                     e.printStackTrace();
                     return null;
                 }
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
             }
         };
 
@@ -120,6 +141,7 @@ public class RecordatorioRepository {
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
             }
+
             @Override
             public byte[] getBody() {
                 try {
@@ -128,6 +150,15 @@ public class RecordatorioRepository {
                     e.printStackTrace();
                     return null;
                 }
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
             }
         };
 
@@ -156,7 +187,15 @@ public class RecordatorioRepository {
                 error -> {
                     error.printStackTrace();
                     callback.onFailure();
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
 
         queue.add(request);
     }

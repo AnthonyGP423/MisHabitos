@@ -12,13 +12,17 @@ import com.sise.mishabitos.entities.Habito;
 import com.sise.mishabitos.shared.BaseResponse;
 import com.sise.mishabitos.shared.Callback;
 import com.sise.mishabitos.shared.Constants;
+import com.sise.mishabitos.shared.SharedPreferencesManager;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class HabitoRepository {
 
-    public void listarHabitosPorUsuario(Context context, int idUsuario, Callback<List<Habito>> callback) {
+    public void listarHabitosPorUsuario(Context context, Callback<List<Habito>> callback) {
+        int idUsuario = SharedPreferencesManager.getInstance(context).getUserId();
         String url = Constants.BASE_URL_API + "/habitos/usuario/" + idUsuario;
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -40,7 +44,15 @@ public class HabitoRepository {
                 error -> {
                     error.printStackTrace();
                     callback.onFailure();
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
 
         queue.add(request);
     }
@@ -84,6 +96,15 @@ public class HabitoRepository {
                     return null;
                 }
             }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
         };
 
         queue.add(request);
@@ -115,7 +136,6 @@ public class HabitoRepository {
                     error.printStackTrace();
                     callback.onFailure();
                 }) {
-
             @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
@@ -129,6 +149,15 @@ public class HabitoRepository {
                     e.printStackTrace();
                     return null;
                 }
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
             }
         };
 
@@ -158,9 +187,16 @@ public class HabitoRepository {
                 error -> {
                     error.printStackTrace();
                     callback.onFailure();
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
 
         queue.add(request);
     }
-
 }

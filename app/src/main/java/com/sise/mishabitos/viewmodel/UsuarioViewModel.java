@@ -10,17 +10,19 @@ import com.sise.mishabitos.entities.Usuario;
 import com.sise.mishabitos.repositories.UsuarioRepository;
 import com.sise.mishabitos.shared.Callback;
 import com.sise.mishabitos.shared.LiveDataResponse;
+import com.sise.mishabitos.shared.SharedPreferencesManager;
 
 import java.util.List;
 
 public class UsuarioViewModel extends ViewModel {
 
-    private MutableLiveData<LiveDataResponse<Usuario>> loginUsuarioLiveData;
+    private final MutableLiveData<LiveDataResponse<Usuario>> loginUsuarioLiveData;
     private final MutableLiveData<LiveDataResponse<List<Usuario>>> listarUsuariosLiveData;
     private final MutableLiveData<LiveDataResponse<Boolean>> insertarUsuarioLiveData;
     private final MutableLiveData<LiveDataResponse<Boolean>> actualizarUsuarioLiveData;
     private final MutableLiveData<LiveDataResponse<Boolean>> eliminarUsuarioLiveData;
-    private UsuarioRepository usuarioRepository;
+
+    private final UsuarioRepository usuarioRepository;
 
     public UsuarioViewModel() {
         loginUsuarioLiveData = new MutableLiveData<>();
@@ -34,6 +36,7 @@ public class UsuarioViewModel extends ViewModel {
     public LiveData<LiveDataResponse<Usuario>> getLoginUsuarioLiveData() {
         return loginUsuarioLiveData;
     }
+
     public LiveData<LiveDataResponse<List<Usuario>>> getListarUsuariosLiveData() {
         return listarUsuariosLiveData;
     }
@@ -54,6 +57,8 @@ public class UsuarioViewModel extends ViewModel {
         usuarioRepository.loginUsuario(context, correo, contrasena, new Callback<Usuario>() {
             @Override
             public void onSuccess(Usuario result) {
+                // IMPORTANTE: Guarda el ID de usuario en SharedPreferences
+                SharedPreferencesManager.getInstance(context).saveUserId(result.getIdUsuario());
                 loginUsuarioLiveData.postValue(LiveDataResponse.success(result));
             }
 

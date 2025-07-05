@@ -12,8 +12,11 @@ import com.sise.mishabitos.entities.FraseMotivacional;
 import com.sise.mishabitos.shared.BaseResponse;
 import com.sise.mishabitos.shared.Callback;
 import com.sise.mishabitos.shared.Constants;
+import com.sise.mishabitos.shared.SharedPreferencesManager;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FraseMotivacionalRepository {
 
@@ -42,7 +45,15 @@ public class FraseMotivacionalRepository {
                 error -> {
                     error.printStackTrace();
                     callback.onFailure();
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
 
         queue.add(request);
     }
@@ -89,13 +100,22 @@ public class FraseMotivacionalRepository {
                     return null;
                 }
             }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
         };
 
         queue.add(request);
     }
 
     public void actualizarFraseMotivacional(Context context, FraseMotivacional frase, Callback<String> callback) {
-        String url = Constants.BASE_URL_API + Constants.ENDPOINT_FRASE_MOTIVACIONAL + frase.getIdFrase(); // Asegúrate de que `FraseMotivacional` tenga un `id`
+        String url = Constants.BASE_URL_API + "/frases/" + frase.getIdFrase();
         RequestQueue queue = Volley.newRequestQueue(context);
 
         Gson gson = new Gson();
@@ -136,6 +156,15 @@ public class FraseMotivacionalRepository {
                     return null;
                 }
             }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
         };
 
         queue.add(request);
@@ -164,7 +193,15 @@ public class FraseMotivacionalRepository {
                 error -> {
                     error.printStackTrace();
                     callback.onFailure();
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
 
         queue.add(request);
     }

@@ -2,6 +2,7 @@ package com.sise.mishabitos.repositories;
 
 import android.content.Context;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -12,9 +13,12 @@ import com.sise.mishabitos.entities.Usuario;
 import com.sise.mishabitos.shared.BaseResponse;
 import com.sise.mishabitos.shared.Callback;
 import com.sise.mishabitos.shared.Constants;
+import com.sise.mishabitos.shared.SharedPreferencesManager;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UsuarioRepository {
 
@@ -44,6 +48,7 @@ public class UsuarioRepository {
 
         queue.add(request);
     }
+
     public void listarUsuarios(Context context, Callback<List<Usuario>> callback) {
         String url = Constants.BASE_URL_API + "/usuarios";
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -67,7 +72,17 @@ public class UsuarioRepository {
                 error -> {
                     error.printStackTrace();
                     callback.onFailure();
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                if (token != null) {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                return headers;
+            }
+        };
 
         queue.add(request);
     }
@@ -159,6 +174,16 @@ public class UsuarioRepository {
                     return null;
                 }
             }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                if (token != null) {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                return headers;
+            }
         };
 
         queue.add(request);
@@ -187,7 +212,17 @@ public class UsuarioRepository {
                 error -> {
                     error.printStackTrace();
                     callback.onFailure();
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                if (token != null) {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                return headers;
+            }
+        };
 
         queue.add(request);
     }

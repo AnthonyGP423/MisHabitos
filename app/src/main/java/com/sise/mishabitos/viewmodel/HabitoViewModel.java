@@ -44,8 +44,8 @@ public class HabitoViewModel extends ViewModel {
         return eliminarHabitoLiveData;
     }
 
-    public void listarHabitosPorUsuario(Context context, int idUsuario) {
-        habitoRepository.listarHabitosPorUsuario(context, idUsuario, new Callback<List<Habito>>() {
+    public void listarHabitosPorUsuario(Context context) {
+        habitoRepository.listarHabitosPorUsuario(context, new Callback<List<Habito>>() {
             @Override
             public void onSuccess(List<Habito> result) {
                 listarHabitosLiveData.postValue(LiveDataResponse.success(result));

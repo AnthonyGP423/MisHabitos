@@ -12,9 +12,12 @@ import com.sise.mishabitos.entities.Categoria;
 import com.sise.mishabitos.shared.BaseResponse;
 import com.sise.mishabitos.shared.Callback;
 import com.sise.mishabitos.shared.Constants;
+import com.sise.mishabitos.shared.SharedPreferencesManager;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CategoriaRepository {
 
@@ -41,7 +44,15 @@ public class CategoriaRepository {
                 error -> {
                     error.printStackTrace();
                     callback.onFailure();
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
 
         queue.add(request);
     }
@@ -72,7 +83,6 @@ public class CategoriaRepository {
                     error.printStackTrace();
                     callback.onFailure();
                 }) {
-
             @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
@@ -86,6 +96,15 @@ public class CategoriaRepository {
                     e.printStackTrace();
                     return null;
                 }
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
             }
         };
 
@@ -132,6 +151,15 @@ public class CategoriaRepository {
                     return null;
                 }
             }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
         };
 
         queue.add(request);
@@ -160,7 +188,15 @@ public class CategoriaRepository {
                 error -> {
                     error.printStackTrace();
                     callback.onFailure();
-                });
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
 
         queue.add(request);
     }
