@@ -1,7 +1,6 @@
 package com.sise.mishabitos;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -24,6 +23,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.sise.mishabitos.activities.CrearHabitoActivity;
 import com.sise.mishabitos.activities.LoginActivity;
+import com.sise.mishabitos.shared.SharedPreferencesManager;
 import com.sise.mishabitos.viewmodel.FraseMotivacionalViewModel;
 
 import java.util.Arrays;
@@ -36,14 +36,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences preferences = getSharedPreferences("session", MODE_PRIVATE);
-        boolean isLoggedIn = preferences.getBoolean("isLoggedIn", false);
-        if (!isLoggedIn) {
+        super.onCreate(savedInstanceState);
+
+        // ✅ VALIDAR SESIÓN USANDO SharedPreferencesManager
+        SharedPreferencesManager sp = SharedPreferencesManager.getInstance(this);
+        String token = sp.getToken();
+        int userId = sp.getUserId();
+
+        if (token == null || token.isEmpty() || userId == -1) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
         }
-        super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         inicializarUI();
@@ -51,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configurarMenuLateral();
         cargarTareasEjemplo();
         configurarBotonFlotante();
+
+        // ✅ Aquí ya tienes userId y token para usar en peticiones si hace falta
+        // Ejemplo: pasarlo a tu Repositorio
+        // HabitoRepository.listarHabitosPorUsuario(userId, token)
     }
 
     private void inicializarUI() {
@@ -59,12 +68,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         btnOtraFrase.setOnClickListener(v -> viewModel.listarFrases(this));
     }
 
-   private void configurarViewModel() {
-     viewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
+    private void configurarViewModel() {
+        viewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
 
-       viewModel.getFraseDelDiaLiveData().observe(this, this::agregarFraseALista);
-     viewModel.listarFrases(this);}
-
+        viewModel.getFraseDelDiaLiveData().observe(this, this::agregarFraseALista);
+        viewModel.listarFrases(this);
+    }
 
     private void configurarMenuLateral() {
         Toolbar toolbar = findViewById(R.id.toolbar);

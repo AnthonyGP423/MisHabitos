@@ -46,6 +46,35 @@ public class SeguimientoRepository {
         queue.add(request);
     }
 
+    // 🚀 NUEVO: Listar por usuario y fecha
+    public void listarSeguimientosPorUsuarioYFecha(Context context, int idUsuario, String fecha, Callback<List<Seguimiento>> callback) {
+        String url = Constants.BASE_URL_API + "/seguimientos/usuario/" + idUsuario + "/" + fecha;
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    try {
+                        Type type = new TypeToken<BaseResponse<List<Seguimiento>>>() {}.getType();
+                        BaseResponse<List<Seguimiento>> baseResponse = new Gson().fromJson(response, type);
+
+                        if (baseResponse != null && baseResponse.isSuccess()) {
+                            callback.onSuccess(baseResponse.getData());
+                        } else {
+                            callback.onFailure();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure();
+                    }
+                },
+                error -> {
+                    error.printStackTrace();
+                    callback.onFailure();
+                });
+
+        queue.add(request);
+    }
+
     public void insertarSeguimiento(Context context, Seguimiento seguimiento, Callback<String> callback) {
         String url = Constants.BASE_URL_API + "/seguimientos";
         RequestQueue queue = Volley.newRequestQueue(context);

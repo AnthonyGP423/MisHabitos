@@ -1,7 +1,6 @@
 package com.sise.mishabitos.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,9 +16,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.sise.mishabitos.MainActivity;
 import com.sise.mishabitos.R;
 import com.sise.mishabitos.shared.Constants;
-import com.sise.mishabitos.utils.SharedPreferencesManager;
+import com.sise.mishabitos.shared.SharedPreferencesManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -84,18 +84,13 @@ public class LoginActivity extends AppCompatActivity {
                             int idUsuario = data.getJSONObject("usuario").getInt("idUsuario");
                             String token = data.getString("token");
 
-                            SharedPreferencesManager.getInstance(this).saveToken(token);
-
-                            SharedPreferences preferences = getSharedPreferences("session", MODE_PRIVATE);
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putBoolean("isLoggedIn", true);
-                            editor.putString("nombre", nombre); // opcional
-                            editor.putInt("idUsuario", idUsuario);
-                            editor.apply();
+                            // ✅ Usamos solo SharedPreferencesManager
+                            SharedPreferencesManager sp = SharedPreferencesManager.getInstance(this);
+                            sp.saveToken(token);
+                            sp.saveIdUsuario(idUsuario);
 
                             Toast.makeText(this, "Bienvenido, " + nombre, Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         } else {
                             Toast.makeText(this, response.getString("message"), Toast.LENGTH_SHORT).show();

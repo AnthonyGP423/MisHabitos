@@ -8,7 +8,7 @@
     android:background="@drawable/imagensession"
     tools:context=".activities.LoginActivity">
 
-    <!-- Fondo de tarjeta -->
+    <!-- Tarjeta -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardLogin"
         android:layout_width="0dp"
@@ -38,10 +38,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Usuario -->
+            <!-- Correo -->
             <EditText
-                android:id="@+id/edtUsuario"
+                android:id="@+id/edtCorreo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:hint="@string/sub_usuario"
+                android:inputType="textEmailAddress"
                 style="@style/InputTexto"
                 app:layout_constraintTop_toBottomOf="@id/lblTitulo"
                 app:layout_constraintStart_toStartOf="parent"
@@ -51,15 +54,17 @@
             <!-- Contraseña -->
             <EditText
                 android:id="@+id/edtContrasena"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:hint="@string/sub_contrasena"
                 android:inputType="textPassword"
                 style="@style/InputTexto"
-                app:layout_constraintTop_toBottomOf="@id/edtUsuario"
+                app:layout_constraintTop_toBottomOf="@id/edtCorreo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/margin_top_input_contrasena" />
 
-            <!-- Texto de registro -->
+            <!-- Texto: No tienes cuenta -->
             <TextView
                 android:id="@+id/txtRegistro"
                 android:layout_width="wrap_content"
@@ -70,14 +75,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="@dimen/margin_top_input_contrasena" />
 
+            <!-- Link: Regístrate -->
             <TextView
                 android:id="@+id/txtRegistrate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/texto_registrate"
                 style="@style/TextoRegistroLink"
+                android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintTop_toTopOf="@id/txtRegistro"
-                app:layout_constraintStart_toEndOf="@id/txtRegistro" />
+                app:layout_constraintStart_toEndOf="@id/txtRegistro"
+                android:layout_marginStart="4dp" />
 
             <!-- Botones de redes -->
             <ImageButton
@@ -87,7 +96,6 @@
                 android:contentDescription="@string/icon_google"
                 app:layout_constraintTop_toBottomOf="@id/txtRegistro"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginTop="@dimen/margin_top_input_contrasena"
                 android:layout_marginEnd="8dp"/>
 
@@ -98,18 +106,22 @@
                 android:contentDescription="@string/icon_facebook"
                 app:layout_constraintTop_toTopOf="@id/btnGoogle"
                 app:layout_constraintStart_toEndOf="@id/btnGoogle"
-                app:layout_constraintBottom_toBottomOf="@id/btnGoogle"
                 android:layout_marginStart="@dimen/margin_espaciado_redes"/>
 
+            <!-- Botón Iniciar Sesión -->
             <Button
                 android:id="@+id/btnIniciar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Iniciar Sesión"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                app:backgroundTint="@color/azulado"
                 app:layout_constraintTop_toBottomOf="@id/btnGoogle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="24dp"/>
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

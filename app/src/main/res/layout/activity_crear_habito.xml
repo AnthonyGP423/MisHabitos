@@ -1,184 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-    >
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.CrearHabitoActivity">
 
-
-    <LinearLayout
-        android:id="@+id/main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:background="@color/azulado"
-            android:paddingTop="@dimen/separar_btn_top"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:title="@string/app_name" />
-    </LinearLayout>
-
-    <!-- Cuerpo  -->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50sp"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="@dimen/checkbox_height"
-        app:layout_constraintBottom_toBottomOf="@+id/main"
-        app:layout_constraintTop_toTopOf="@+id/main"
-        tools:ignore="MissingConstraints">
+        android:background="@color/azulado"
+        app:title="@string/titulo_crear_tarea"
+        app:titleTextColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-        <TextView
-            android:id="@+id/tituloCrearTarea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/titulo_crear_tarea"
-            android:layout_marginBottom="@dimen/separar_btn_top"
-            android:textColor="@android:color/black"
-            tools:ignore="MissingConstraints"
-            style="@style/TituloPrincipal"/>
-
-        <!-- Nombre del hábito -->
-        <EditText
-            android:id="@+id/txtNombreHabito"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/nombre_habito"
-            android:inputType="textPersonName" />
-
-        <!-- Detalles del hábito -->
-        <EditText
-            android:id="@+id/txtDetallesHabito"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:gravity="top"
-            android:hint="@string/detalles_habito"
-            android:inputType="textMultiLine"
-            android:minLines="3" />
-
-        <!-- Días de la semana -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:text="@string/dias_titulo"
-            android:textStyle="bold" />
+    <!-- Contenido desplazable -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="24dp">
 
-            <CheckBox
-                android:id="@+id/cbLunes"
-                android:layout_width="wrap_content"
+            <!-- Nombre -->
+            <EditText
+                android:id="@+id/txtNombreHabito"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="L" />
+                android:layout_marginBottom="8dp"
+                android:hint="@string/nombre_habito"
+                android:inputType="textPersonName" />
 
-            <CheckBox
-                android:id="@+id/cbMartes"
-                android:layout_width="wrap_content"
+            <!-- Descripción -->
+            <EditText
+                android:id="@+id/txtDetallesHabito"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="M" />
+                android:layout_marginBottom="12dp"
+                android:hint="@string/detalles_habito"
+                android:inputType="textMultiLine"
+                android:minLines="3" />
 
-            <CheckBox
-                android:id="@+id/cbMiercoles"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="M" />
-
-            <CheckBox
-                android:id="@+id/cbJueves"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="J" />
-
-            <CheckBox
-                android:id="@+id/cbViernes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="V" />
-
-            <CheckBox
-                android:id="@+id/cbSabado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="S" />
-
-            <CheckBox
-                android:id="@+id/cbDomingo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="D" />
-
-        </LinearLayout>
-
-        <!-- Hora -->
-        <TimePicker
-            android:id="@+id/horadelatarea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:timePickerMode="spinner" />
-
-        <!-- Alarma -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
+            <!-- Categoría -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/alarma_titulo" />
+                android:text="Categoría"
+                android:textStyle="bold"/>
 
-            <Switch
-                android:id="@+id/swAlarma"
+            <Spinner
+                android:id="@+id/spCategoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Días -->
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="false"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
-        </LinearLayout>
+                android:text="@string/dias_titulo"
+                android:textStyle="bold"/>
 
-        <!-- Botones -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:gravity="bottom"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/btnAgregarTarea"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margen_frase_Del_dia"
-                android:layout_weight="@integer/material_motion_duration_long_1"
-                android:backgroundTint="@color/aceptar_color"
-                android:text="@string/agregar_tarea" />
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnCancelarTarea"
-                android:layout_width="0dp"
+                <CheckBox android:id="@+id/cbLunes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="L" />
+                <CheckBox android:id="@+id/cbMartes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="M" />
+                <CheckBox android:id="@+id/cbMiercoles" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="M" />
+                <CheckBox android:id="@+id/cbJueves" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="J" />
+                <CheckBox android:id="@+id/cbViernes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V" />
+                <CheckBox android:id="@+id/cbSabado" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="S" />
+                <CheckBox android:id="@+id/cbDomingo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="D" />
+            </LinearLayout>
+
+            <!-- Hora sugerida -->
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margen_frase_Del_dia"
-                android:layout_weight="@integer/material_motion_duration_long_1"
-                android:backgroundTint="@color/rechazar_color"
-                android:text="@string/btn_cancelar_tarea" />
+                android:text="Hora sugerida"
+                android:layout_marginTop="16dp"/>
+
+            <TimePicker
+                android:id="@+id/horadelatarea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:timePickerMode="spinner"/>
+
+            <!-- Recordatorio -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/alarma_titulo" />
+
+                <Switch
+                    android:id="@+id/swAlarma"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <!-- Botones -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnAgregarTarea"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/aceptar_color"
+                    android:text="@string/agregar_tarea"/>
+
+                <Button
+                    android:id="@+id/btnCancelarTarea"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/rechazar_color"
+                    android:text="@string/btn_cancelar_tarea"/>
+            </LinearLayout>
+
         </LinearLayout>
+    </ScrollView>
 
-    </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
