@@ -4,35 +4,41 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.CheckBox;
 import android.widget.Toast;
-import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.sise.mishabitos.activities.CrearHabitoActivity;
+import com.sise.mishabitos.activities.EditarHabitoActivity;
 import com.sise.mishabitos.activities.LoginActivity;
+import com.sise.mishabitos.adapters.HabitoAdapter;
+import com.sise.mishabitos.entities.Habito;
 import com.sise.mishabitos.shared.SharedPreferencesManager;
 import com.sise.mishabitos.viewmodel.FraseMotivacionalViewModel;
+import com.sise.mishabitos.viewmodel.HabitoViewModel;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     private DrawerLayout drawer;
-    private FraseMotivacionalViewModel viewModel;
-    private LinearLayout layoutFrases;
+
+    private FraseMotivacionalViewModel fraseViewModel;
+    private HabitoViewModel habitoViewModel;
+
+    private RecyclerView recyclerHabitos;
+    private HabitoAdapter habitoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,24 +57,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         inicializarUI();
-        configurarViewModel();
+        configurarViewModels();
         configurarMenuLateral();
-        cargarTareasEjemplo();
+        configurarRecyclerHabitos();
         configurarBotonFlotante();
-
     }
 
     private void inicializarUI() {
         Button btnOtraFrase = findViewById(R.id.btn_otra_frase);
-        layoutFrases = findViewById(R.id.layout_frases);
-        btnOtraFrase.setOnClickListener(v -> viewModel.listarFrases(this));
+        btnOtraFrase.setOnClickListener(v -> fraseViewModel.listarFrases(this));
     }
 
-    private void configurarViewModel() {
-        viewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
+    private void configurarViewModels() {
+        fraseViewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
+        habitoViewModel = new ViewModelProvider(this).get(HabitoViewModel.class);
 
-        viewModel.getFraseDelDiaLiveData().observe(this, this::agregarFraseALista);
-        viewModel.listarFrases(this);
+        fraseViewModel.getFraseDelDiaLiveData().observe(this, this::mostrarFraseDelDia);
+        fraseViewModel.listarFrases(this);
+
+        habitoViewModel.getListarHabitosLiveData().observe(this, response -> {
+            if (response.isSuccess()) {
+                habitoAdapter.actualizarLista(response.getData());
+            } else {
+                Toast.makeText(this, "No se pudieron cargar los hábitos", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        int userId = SharedPreferencesManager.getInstance(this).getUserId();
+        habitoViewModel.listarHabitosPorUsuario(this, userId);
     }
 
     private void configurarMenuLateral() {
@@ -87,41 +103,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
     }
 
-    private void cargarTareasEjemplo() {
-        LinearLayout contenedorTareas = findViewById(R.id.contenedor_tareas);
-        List<String> listaTareas = Arrays.asList("Tarea 1", "Tarea 2", "Tarea 3");
+    private void configurarRecyclerHabitos() {
+        recyclerHabitos = findViewById(R.id.recycler_habitos);
+        recyclerHabitos.setLayoutManager(new LinearLayoutManager(this));
 
-        for (String nombreTarea : listaTareas) {
-            CheckBox checkBox = new CheckBox(this);
-            checkBox.setText(nombreTarea);
-            checkBox.setTextColor(ContextCompat.getColor(this, R.color.texto_tareas));
-            checkBox.setTextSize(TypedValue.COMPLEX_UNIT_SP,
-                    getResources().getDimension(R.dimen.checkbox_text_size) / getResources().getDisplayMetrics().scaledDensity);
+        habitoAdapter = new HabitoAdapter(new ArrayList<>(), new HabitoAdapter.OnItemClickListener() {
+            @Override
+            public void onEditarClick(Habito habito) {
+                Intent intent = new Intent(MainActivity.this, EditarHabitoActivity.class);
+                intent.putExtra("habito", habito);
+                startActivity(intent);
+            }
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    (int) getResources().getDimension(R.dimen.checkbox_height)
-            );
-            int margin = (int) getResources().getDimension(R.dimen.checkbox_margin);
-            params.setMargins(margin, margin, margin, margin);
-            checkBox.setLayoutParams(params);
+            @Override
+            public void onCompletarClick(Habito habito) {
+                Toast.makeText(MainActivity.this, "Completar hábito: " + habito.getNombre(), Toast.LENGTH_SHORT).show();
+                // Aquí puedes llamar a tu lógica de marcar como completado o actualizar seguimiento
+            }
+        });
 
-            int padding = (int) getResources().getDimension(R.dimen.checkbox_padding);
-            checkBox.setPadding(padding, padding, padding, padding);
-
-            contenedorTareas.addView(checkBox);
-        }
+        recyclerHabitos.setAdapter(habitoAdapter);
     }
 
     private void configurarBotonFlotante() {
         FloatingActionButton botonAgregar = findViewById(R.id.btn_agregar_tarea);
-        botonAgregar.setOnClickListener(v -> {
-            Toast.makeText(this, "Agregar nueva tarea", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, CrearHabitoActivity.class));
-        });
+        botonAgregar.setOnClickListener(v -> startActivity(new Intent(this, CrearHabitoActivity.class)));
     }
 
-    private void agregarFraseALista(String texto) {
+    private void mostrarFraseDelDia(String texto) {
         TextView fraseMostrada = findViewById(R.id.frase_mostrada);
         fraseMostrada.setText(texto);
     }

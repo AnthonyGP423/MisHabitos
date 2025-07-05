@@ -1,5 +1,7 @@
 package com.sise.mishabitos.adapters;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sise.mishabitos.R;
+import com.sise.mishabitos.activities.EditarHabitoActivity;
 import com.sise.mishabitos.entities.Habito;
 
 import java.util.List;
@@ -17,16 +20,11 @@ import java.util.List;
 public class HabitoAdapter extends RecyclerView.Adapter<HabitoAdapter.HabitoViewHolder> {
 
     private List<Habito> listaHabitos;
-    private OnItemClickListener listener;
+    private Context context;
 
-    public interface OnItemClickListener {
-        void onEditarClick(Habito habito);
-        void onCompletarClick(Habito habito);
-    }
-
-    public HabitoAdapter(List<Habito> listaHabitos, OnItemClickListener listener) {
+    public HabitoAdapter(Context context, List<Habito> listaHabitos) {
+        this.context = context;
         this.listaHabitos = listaHabitos;
-        this.listener = listener;
     }
 
     @NonNull
@@ -43,8 +41,16 @@ public class HabitoAdapter extends RecyclerView.Adapter<HabitoAdapter.HabitoView
         holder.txtDescripcion.setText(habito.getDescripcion());
         holder.txtHora.setText("Hora: " + habito.getHoraSugerida());
 
-        holder.btnEditar.setOnClickListener(v -> listener.onEditarClick(habito));
-        holder.btnCompletar.setOnClickListener(v -> listener.onCompletarClick(habito));
+        holder.btnEditar.setOnClickListener(v -> {
+            Intent intent = new Intent(context, EditarHabitoActivity.class);
+            intent.putExtra("habito", habito);
+            context.startActivity(intent);
+        });
+
+        holder.btnCompletar.setOnClickListener(v -> {
+            // TODO: lógica para marcar como completado
+            // Por ejemplo: actualizar seguimiento, mostrar mensaje, etc.
+        });
     }
 
     @Override
