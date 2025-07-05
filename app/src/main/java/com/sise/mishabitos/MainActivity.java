@@ -24,10 +24,13 @@ import com.sise.mishabitos.activities.EditarHabitoActivity;
 import com.sise.mishabitos.activities.LoginActivity;
 import com.sise.mishabitos.adapters.HabitoAdapter;
 import com.sise.mishabitos.entities.Habito;
+import com.sise.mishabitos.entities.Seguimiento;
 import com.sise.mishabitos.shared.SharedPreferencesManager;
 import com.sise.mishabitos.viewmodel.FraseMotivacionalViewModel;
 import com.sise.mishabitos.viewmodel.HabitoViewModel;
+import com.sise.mishabitos.viewmodel.SeguimientoViewModel;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -36,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FraseMotivacionalViewModel fraseViewModel;
     private HabitoViewModel habitoViewModel;
+    private SeguimientoViewModel seguimientoViewModel;
 
     private RecyclerView recyclerHabitos;
     private HabitoAdapter habitoAdapter;
@@ -71,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void configurarViewModels() {
         fraseViewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
         habitoViewModel = new ViewModelProvider(this).get(HabitoViewModel.class);
+        seguimientoViewModel = new ViewModelProvider(this).get(SeguimientoViewModel.class);
 
         fraseViewModel.getFraseDelDiaLiveData().observe(this, this::mostrarFraseDelDia);
         fraseViewModel.listarFrases(this);
@@ -85,6 +90,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         int userId = SharedPreferencesManager.getInstance(this).getUserId();
         habitoViewModel.listarHabitosPorUsuario(this, userId);
+
+        seguimientoViewModel.getInsertarSeguimientoLiveData().observe(this, response -> {
+            if (response.isSuccess()) {
+                Toast.makeText(this, "Hábito completado", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "No se pudo marcar como completado", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void configurarMenuLateral() {
@@ -118,11 +131,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onCompletarClick(Habito habito) {
                 Toast.makeText(MainActivity.this, "Completar hábito: " + habito.getNombre(), Toast.LENGTH_SHORT).show();
-                // Aquí puedes llamar a tu lógica de marcar como completado o actualizar seguimiento
+                registrarSeguimiento(habito);
             }
         });
 
         recyclerHabitos.setAdapter(habitoAdapter);
+    }
+
+    private void registrarSeguimiento(Habito habito) {
+        int idUsuario = SharedPreferencesManager.getInstance(this).getUserId();
+        String fechaHoy = LocalDate.now().toString(); // YYYY-MM-DD
+
+        Seguimiento s = new Seguimiento();
+        s.setIdUsuario(idUsuario);
+        s.setIdHabito(habito.getIdHabito());
+        s.setFecha(fechaHoy);
+        s.setEstado(true);
+
+        seguimientoViewModel.insertarSeguimiento(this, s);
     }
 
     private void configurarBotonFlotante() {
@@ -149,6 +175,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        int userId = SharedPreferencesManager.getInstance(this).getUserId();
+        habitoViewModel.listarHabitosPorUsuario(this, userId);
     }
 
     @Override

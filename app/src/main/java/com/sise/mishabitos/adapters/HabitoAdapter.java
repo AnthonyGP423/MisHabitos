@@ -21,10 +21,17 @@ public class HabitoAdapter extends RecyclerView.Adapter<HabitoAdapter.HabitoView
 
     private List<Habito> listaHabitos;
     private Context context;
+    private OnItemClickListener listener;
 
-    public HabitoAdapter(Context context, List<Habito> listaHabitos) {
+    public interface OnItemClickListener {
+        void onEditarClick(Habito habito);
+        void onCompletarClick(Habito habito);
+    }
+
+    public HabitoAdapter(Context context, List<Habito> listaHabitos, OnItemClickListener listener) {
         this.context = context;
         this.listaHabitos = listaHabitos;
+        this.listener = listener;
     }
 
     @NonNull
@@ -41,16 +48,9 @@ public class HabitoAdapter extends RecyclerView.Adapter<HabitoAdapter.HabitoView
         holder.txtDescripcion.setText(habito.getDescripcion());
         holder.txtHora.setText("Hora: " + habito.getHoraSugerida());
 
-        holder.btnEditar.setOnClickListener(v -> {
-            Intent intent = new Intent(context, EditarHabitoActivity.class);
-            intent.putExtra("habito", habito);
-            context.startActivity(intent);
-        });
+        holder.btnEditar.setOnClickListener(v -> listener.onEditarClick(habito));
 
-        holder.btnCompletar.setOnClickListener(v -> {
-            // TODO: lógica para marcar como completado
-            // Por ejemplo: actualizar seguimiento, mostrar mensaje, etc.
-        });
+        holder.btnCompletar.setOnClickListener(v -> listener.onCompletarClick(habito));
     }
 
     @Override
@@ -70,5 +70,11 @@ public class HabitoAdapter extends RecyclerView.Adapter<HabitoAdapter.HabitoView
             btnEditar = itemView.findViewById(R.id.btnEditarHabito);
             btnCompletar = itemView.findViewById(R.id.btnCompletarHabito);
         }
+    }
+
+    public void actualizarLista(List<Habito> nuevaLista) {
+        this.listaHabitos.clear();
+        this.listaHabitos.addAll(nuevaLista);
+        notifyDataSetChanged();
     }
 }
