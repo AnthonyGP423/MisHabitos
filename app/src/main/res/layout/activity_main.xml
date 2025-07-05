@@ -29,7 +29,6 @@
             android:textSize="@dimen/texto_titulo"
             style="@style/TituloPrincipal" />
 
-        <!-- RecyclerView para mostrar lista de hábitos -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_habitos"
             android:layout_width="match_parent"
@@ -39,7 +38,6 @@
             android:background="@color/pizarron"
             android:padding="16dp" />
 
-        <!-- Botones flotantes -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,7 +54,7 @@
                 android:src="@android:drawable/ic_input_add"
                 app:backgroundTint="@color/azulado" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
+            <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/btn_editar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,11 +70,10 @@
                 android:layout_marginStart="@dimen/separar_btn_derecha"
                 android:contentDescription="@string/confirmar_tarea"
                 android:src="@android:drawable/ic_menu_save"
-                app:backgroundTint="@color/verde_claro" />
+                app:backgroundTint="@color/verde_claro" /> -->
 
         </LinearLayout>
 
-        <!-- Frase del día -->
         <TextView
             android:id="@+id/texto_frase_dia"
             style="@style/FraseDelDiaStyle"

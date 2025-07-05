@@ -8,7 +8,6 @@
     android:background="@drawable/imagensession"
     tools:context=".activities.LoginActivity">
 
-    <!-- Tarjeta -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardLogin"
         android:layout_width="0dp"
@@ -27,7 +26,6 @@
             android:layout_height="wrap_content"
             android:padding="24dp">
 
-            <!-- Título -->
             <TextView
                 android:id="@+id/lblTitulo"
                 android:layout_width="wrap_content"
@@ -38,7 +36,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Correo -->
             <EditText
                 android:id="@+id/edtCorreo"
                 android:layout_width="0dp"
@@ -51,7 +48,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/margin_top_input_usuario" />
 
-            <!-- Contraseña -->
             <EditText
                 android:id="@+id/edtContrasena"
                 android:layout_width="0dp"
@@ -64,7 +60,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/margin_top_input_contrasena" />
 
-            <!-- Texto: No tienes cuenta -->
             <TextView
                 android:id="@+id/txtRegistro"
                 android:layout_width="wrap_content"
@@ -75,7 +70,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="@dimen/margin_top_input_contrasena" />
 
-            <!-- Link: Regístrate -->
             <TextView
                 android:id="@+id/txtRegistrate"
                 android:layout_width="wrap_content"
@@ -88,7 +82,6 @@
                 app:layout_constraintStart_toEndOf="@id/txtRegistro"
                 android:layout_marginStart="4dp" />
 
-            <!-- Botones de redes -->
             <ImageButton
                 android:id="@+id/btnGoogle"
                 style="@style/BotonRedSocial"
@@ -108,7 +101,6 @@
                 app:layout_constraintStart_toEndOf="@id/btnGoogle"
                 android:layout_marginStart="@dimen/margin_espaciado_redes"/>
 
-            <!-- Botón Iniciar Sesión -->
             <Button
                 android:id="@+id/btnIniciar"
                 android:layout_width="0dp"

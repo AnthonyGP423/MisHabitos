@@ -30,10 +30,8 @@ public class FraseActivity extends AppCompatActivity {
             agregarFraseALista(texto.toString());
         });
 
-        // Carga inicial
         viewModel.listarFrases(this);
 
-        // Botón
         btnOtra.setOnClickListener(v -> viewModel.listarFrases(this));
     }
 

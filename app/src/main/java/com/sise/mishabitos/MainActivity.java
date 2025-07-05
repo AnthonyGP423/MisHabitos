@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // ✅ VALIDAR SESIÓN USANDO SharedPreferencesManager
         SharedPreferencesManager sp = SharedPreferencesManager.getInstance(this);
         String token = sp.getToken();
         int userId = sp.getUserId();
@@ -57,9 +56,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cargarTareasEjemplo();
         configurarBotonFlotante();
 
-        // ✅ Aquí ya tienes userId y token para usar en peticiones si hace falta
-        // Ejemplo: pasarlo a tu Repositorio
-        // HabitoRepository.listarHabitosPorUsuario(userId, token)
     }
 
     private void inicializarUI() {

@@ -45,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
         String correo = correoInput.getText().toString().trim();
         String password = passwordInput.getText().toString().trim();
 
-        String url = "http://TU_IP_LOCAL:PUERTO/usuario"; // Cambia IP y puerto
+        String url = "";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 response -> {

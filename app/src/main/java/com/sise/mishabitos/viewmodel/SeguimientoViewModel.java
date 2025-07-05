@@ -52,7 +52,6 @@ public class SeguimientoViewModel extends ViewModel {
         return eliminarSeguimientoLiveData;
     }
 
-    // 🔵 LISTAR POR HÁBITO
     public void listarSeguimientosPorHabito(Context context, int idHabito) {
         seguimientoRepository.listarSeguimientosPorHabito(context, idHabito, new Callback<List<Seguimiento>>() {
             @Override
@@ -67,7 +66,6 @@ public class SeguimientoViewModel extends ViewModel {
         });
     }
 
-    // 🔵 LISTAR POR USUARIO Y FECHA (usa SharedPreferencesManager)
     public void listarSeguimientosPorUsuarioYFecha(Context context, String fecha) {
         seguimientoRepository.listarSeguimientosPorUsuarioYFecha(context, fecha, new Callback<List<Seguimiento>>() {
             @Override
@@ -82,7 +80,6 @@ public class SeguimientoViewModel extends ViewModel {
         });
     }
 
-    // 🔵 INSERTAR
     public void insertarSeguimiento(Context context, Seguimiento seguimiento) {
         seguimientoRepository.insertarSeguimiento(context, seguimiento, new Callback<String>() {
             @Override
@@ -97,7 +94,6 @@ public class SeguimientoViewModel extends ViewModel {
         });
     }
 
-    // 🔵 ACTUALIZAR
     public void actualizarSeguimiento(Context context, Seguimiento seguimiento) {
         seguimientoRepository.actualizarSeguimiento(context, seguimiento, new Callback<String>() {
             @Override
@@ -112,7 +108,6 @@ public class SeguimientoViewModel extends ViewModel {
         });
     }
 
-    // 🔵 ELIMINAR
     public void eliminarSeguimiento(Context context, int idSeguimiento) {
         seguimientoRepository.eliminarSeguimiento(context, idSeguimiento, new Callback<String>() {
             @Override

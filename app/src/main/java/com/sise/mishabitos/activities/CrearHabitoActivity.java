@@ -28,7 +28,6 @@ public class CrearHabitoActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Esto cierra el Activity actual y vuelve al anterior
         Button btnCancelarTarea = findViewById(R.id.btnCancelarTarea);
         btnCancelarTarea.setOnClickListener(new View.OnClickListener() {
             @Override

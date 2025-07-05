@@ -22,7 +22,6 @@ public class SharedPreferencesManager {
         return instance;
     }
 
-    // === TOKEN ===
     public void saveToken(String token) {
         prefs.edit().putString(KEY_TOKEN, token).apply();
     }
@@ -35,7 +34,6 @@ public class SharedPreferencesManager {
         prefs.edit().remove(KEY_TOKEN).apply();
     }
 
-    // === USER ID ===
     public void saveUserId(int userId) {
         prefs.edit().putInt(KEY_USER_ID, userId).apply();
     }
@@ -48,7 +46,6 @@ public class SharedPreferencesManager {
         prefs.edit().remove(KEY_USER_ID).apply();
     }
 
-    // === CLEAR ALL ===
     public void clearSession() {
         prefs.edit().clear().apply();
     }

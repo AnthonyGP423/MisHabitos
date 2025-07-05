@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.PerfilUsuarioActivity">
 
-    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -20,7 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Contenido -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -36,7 +34,6 @@
             android:gravity="center_horizontal"
             android:padding="24dp">
 
-            <!-- Foto de perfil -->
             <ImageView
                 android:id="@+id/imgFotoPerfil"
                 android:layout_width="100dp"
@@ -45,7 +42,6 @@
                 android:contentDescription="Foto de perfil"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Nombre -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,7 +54,6 @@
                 android:enabled="false"
                 android:layout_marginBottom="12dp"/>
 
-            <!-- Apellido paterno -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,7 +66,6 @@
                 android:enabled="false"
                 android:layout_marginBottom="12dp"/>
 
-            <!-- Apellido materno -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -84,7 +78,6 @@
                 android:enabled="false"
                 android:layout_marginBottom="12dp"/>
 
-            <!-- Correo -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -97,7 +90,6 @@
                 android:enabled="false"
                 android:layout_marginBottom="12dp"/>
 
-            <!-- Fecha nacimiento -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,7 +102,6 @@
                 android:enabled="false"
                 android:layout_marginBottom="24dp"/>
 
-            <!-- Botón Editar -->
             <Button
                 android:id="@+id/btnEditarPerfil"
                 android:layout_width="match_parent"
@@ -120,7 +111,6 @@
                 android:textColor="@android:color/white"
                 android:layout_marginBottom="12dp"/>
 
-            <!-- Botón Cerrar sesión -->
             <Button
                 android:id="@+id/btnCerrarSesion"
                 android:layout_width="match_parent"

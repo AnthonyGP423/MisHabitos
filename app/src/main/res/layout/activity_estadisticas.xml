@@ -8,7 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.EstadisticasActivity">
 
-    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -20,7 +19,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Contenido -->
     <LinearLayout
         android:id="@+id/container_estadisticas"
         android:layout_width="0dp"
@@ -33,7 +31,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Barra de progreso -->
         <ProgressBar
             android:id="@+id/progresoHabitos"
             style="?android:attr/progressBarStyleHorizontal"
@@ -44,7 +41,6 @@
             android:progressTint="@color/verde_claro"
             android:layout_marginBottom="16dp"/>
 
-        <!-- Texto de porcentaje -->
         <TextView
             android:id="@+id/txtPorcentaje"
             android:layout_width="wrap_content"
@@ -55,7 +51,6 @@
             android:textColor="@color/verde_claro"
             android:layout_marginBottom="24dp"/>
 
-        <!-- Mensaje motivacional -->
         <TextView
             android:id="@+id/txtMensajeMotivacional"
             android:layout_width="wrap_content"

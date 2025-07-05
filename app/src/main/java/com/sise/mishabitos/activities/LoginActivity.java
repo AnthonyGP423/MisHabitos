@@ -84,7 +84,6 @@ public class LoginActivity extends AppCompatActivity {
                             int idUsuario = data.getJSONObject("usuario").getInt("idUsuario");
                             String token = data.getString("token");
 
-                            // ✅ Usamos solo SharedPreferencesManager
                             SharedPreferencesManager sp = SharedPreferencesManager.getInstance(this);
                             sp.saveToken(token);
                             sp.saveIdUsuario(idUsuario);

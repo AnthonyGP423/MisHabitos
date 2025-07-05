@@ -13,7 +13,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Nombre -->
         <TextView
             android:id="@+id/txtNombreHabito"
             android:layout_width="wrap_content"
@@ -23,7 +22,6 @@
             android:textSize="18sp"
             android:textColor="@color/black"/>
 
-        <!-- Descripción -->
         <TextView
             android:id="@+id/txtDescripcionHabito"
             android:layout_width="wrap_content"
@@ -33,7 +31,6 @@
             android:textColor="@color/black"
             android:layout_marginTop="4dp"/>
 
-        <!-- Hora sugerida -->
         <TextView
             android:id="@+id/txtHoraSugerida"
             android:layout_width="wrap_content"
@@ -43,7 +40,6 @@
             android:textColor="@color/black"
             android:layout_marginTop="4dp"/>
 
-        <!-- Botones -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.EditarHabitoActivity">
 
-    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -19,7 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Contenido desplazable -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -35,7 +33,6 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- Nombre -->
             <EditText
                 android:id="@+id/edtNombreHabito"
                 android:layout_width="match_parent"
@@ -44,7 +41,6 @@
                 android:hint="@string/nombre_habito"
                 android:inputType="textPersonName" />
 
-            <!-- Descripción -->
             <EditText
                 android:id="@+id/edtDescripcionHabito"
                 android:layout_width="match_parent"
@@ -54,7 +50,6 @@
                 android:inputType="textMultiLine"
                 android:minLines="3" />
 
-            <!-- Categoría -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,7 +62,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Días -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -88,7 +82,6 @@
                 <CheckBox android:id="@+id/cbDomingo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="D" />
             </LinearLayout>
 
-            <!-- Hora sugerida -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,7 +94,6 @@
                 android:layout_height="wrap_content"
                 android:timePickerMode="spinner"/>
 
-            <!-- Recordatorio -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -120,7 +112,6 @@
                     android:layout_height="wrap_content"/>
             </LinearLayout>
 
-            <!-- Botones -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
