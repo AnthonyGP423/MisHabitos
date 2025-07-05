@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_editar_habito"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.EditarHabitoActivity">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/azulado"
+        app:title="Editar Hábito"
+        app:titleTextColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Contenido desplazable -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Nombre -->
+            <EditText
+                android:id="@+id/edtNombreHabito"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:hint="@string/nombre_habito"
+                android:inputType="textPersonName" />
+
+            <!-- Descripción -->
+            <EditText
+                android:id="@+id/edtDescripcionHabito"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:hint="@string/detalles_habito"
+                android:inputType="textMultiLine"
+                android:minLines="3" />
+
+            <!-- Categoría -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categoría"
+                android:textStyle="bold"/>
+
+            <Spinner
+                android:id="@+id/spCategoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Días -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dias_titulo"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <CheckBox android:id="@+id/cbLunes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="L" />
+                <CheckBox android:id="@+id/cbMartes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="M" />
+                <CheckBox android:id="@+id/cbMiercoles" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="M" />
+                <CheckBox android:id="@+id/cbJueves" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="J" />
+                <CheckBox android:id="@+id/cbViernes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V" />
+                <CheckBox android:id="@+id/cbSabado" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="S" />
+                <CheckBox android:id="@+id/cbDomingo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="D" />
+            </LinearLayout>
+
+            <!-- Hora sugerida -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hora sugerida"
+                android:layout_marginTop="16dp"/>
+
+            <TimePicker
+                android:id="@+id/horadelatarea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:timePickerMode="spinner"/>
+
+            <!-- Recordatorio -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/alarma_titulo" />
+
+                <Switch
+                    android:id="@+id/swAlarma"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <!-- Botones -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnGuardarCambios"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/aceptar_color"
+                    android:text="@string/btn_guardar_habito"/>
+
+                <Button
+                    android:id="@+id/btnEliminarHabito"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/rechazar_color"
+                    android:text="@string/btn_eliminar_habito"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
