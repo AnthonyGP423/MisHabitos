@@ -20,17 +20,14 @@ public class ConfiguracionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuracion);
 
-        // Inicializar UI
         swNotificaciones = findViewById(R.id.swNotificaciones);
         swModoOscuro = findViewById(R.id.swModoOscuro);
         btnGuardarConfig = findViewById(R.id.btnGuardarConfig);
 
-        // Cargar estado guardado
         SharedPreferencesManager sp = SharedPreferencesManager.getInstance(this);
         swNotificaciones.setChecked(sp.getNotificaciones());
         swModoOscuro.setChecked(sp.getModoOscuro());
 
-        // Botón guardar
         btnGuardarConfig.setOnClickListener(v -> {
             sp.saveNotificaciones(swNotificaciones.isChecked());
             sp.saveModoOscuro(swModoOscuro.isChecked());

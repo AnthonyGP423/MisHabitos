@@ -82,7 +82,6 @@ public class CrearHabitoActivity extends AppCompatActivity {
         habitoViewModel = new ViewModelProvider(this).get(HabitoViewModel.class);
         frecuenciaHabitoViewModel = new ViewModelProvider(this).get(FrecuenciaHabitoViewModel.class);
 
-        // Observar inserción de hábito
         habitoViewModel.getInsertarHabitoLiveData().observe(this, response -> {
             if (response.isSuccess()) {
                 // data = idHabito devuelto del backend

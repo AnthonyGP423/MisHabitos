@@ -34,7 +34,7 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
 
         holder.txtNombreHabito.setText(s.getHabito().getNombre());
         holder.txtFechaSeguimiento.setText(s.getFecha());
-        holder.txtEstadoSeguimiento.setText(s.getEstado() ? "✅ Completado" : "❌ Incompleto");
+        holder.txtEstadoSeguimiento.setText(s.getEstadoAuditoria() ? "✅ Completado" : "❌ Incompleto");
     }
 
     @Override
