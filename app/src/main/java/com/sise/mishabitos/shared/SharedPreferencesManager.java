@@ -8,6 +8,9 @@ public class SharedPreferencesManager {
     private static final String KEY_TOKEN = "jwt_token";
     private static final String KEY_USER_ID = "user_id";
 
+    private static final String KEY_NOTIFICACIONES = "notificaciones";
+    private static final String KEY_MODO_OSCURO = "modo_oscuro";
+
     private static SharedPreferencesManager instance;
     private final SharedPreferences prefs;
 
@@ -22,6 +25,7 @@ public class SharedPreferencesManager {
         return instance;
     }
 
+    // ---------- Sesión ----------
     public void saveToken(String token) {
         prefs.edit().putString(KEY_TOKEN, token).apply();
     }
@@ -39,7 +43,7 @@ public class SharedPreferencesManager {
     }
 
     public int getUserId() {
-        return prefs.getInt(KEY_USER_ID, -1); // -1 si no existe
+        return prefs.getInt(KEY_USER_ID, -1);
     }
 
     public void clearUserId() {
@@ -48,5 +52,22 @@ public class SharedPreferencesManager {
 
     public void clearSession() {
         prefs.edit().clear().apply();
+    }
+
+    // ---------- Configuración ----------
+    public void saveNotificaciones(boolean value) {
+        prefs.edit().putBoolean(KEY_NOTIFICACIONES, value).apply();
+    }
+
+    public boolean getNotificaciones() {
+        return prefs.getBoolean(KEY_NOTIFICACIONES, true); // true por defecto
+    }
+
+    public void saveModoOscuro(boolean value) {
+        prefs.edit().putBoolean(KEY_MODO_OSCURO, value).apply();
+    }
+
+    public boolean getModoOscuro() {
+        return prefs.getBoolean(KEY_MODO_OSCURO, false); // false por defecto
     }
 }

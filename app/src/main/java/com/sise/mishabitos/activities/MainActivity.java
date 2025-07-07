@@ -1,4 +1,4 @@
-package com.sise.mishabitos;
+package com.sise.mishabitos.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,9 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.sise.mishabitos.activities.CrearHabitoActivity;
-import com.sise.mishabitos.activities.EditarHabitoActivity;
-import com.sise.mishabitos.activities.LoginActivity;
+import com.sise.mishabitos.R;
 import com.sise.mishabitos.adapters.HabitoAdapter;
 import com.sise.mishabitos.entities.Habito;
 import com.sise.mishabitos.entities.Seguimiento;
@@ -120,27 +118,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerHabitos = findViewById(R.id.recycler_habitos);
         recyclerHabitos.setLayoutManager(new LinearLayoutManager(this));
 
-        habitoAdapter = new HabitoAdapter(new ArrayList<>(), new HabitoAdapter.OnItemClickListener() {
-            @Override
-            public void onEditarClick(Habito habito) {
-                Intent intent = new Intent(MainActivity.this, EditarHabitoActivity.class);
-                intent.putExtra("habito", habito);
-                startActivity(intent);
-            }
+        habitoAdapter = new HabitoAdapter(
+                this, // Context obligatorio
+                new ArrayList<>(), // Lista vacía inicial
+                new HabitoAdapter.OnItemClickListener() {
+                    @Override
+                    public void onEditarClick(Habito habito) {
+                        Intent intent = new Intent(MainActivity.this, EditarHabitoActivity.class);
+                        intent.putExtra("habito", habito);
+                        startActivity(intent);
+                    }
 
-            @Override
-            public void onCompletarClick(Habito habito) {
-                Toast.makeText(MainActivity.this, "Completar hábito: " + habito.getNombre(), Toast.LENGTH_SHORT).show();
-                registrarSeguimiento(habito);
-            }
-        });
+                    @Override
+                    public void onCompletarClick(Habito habito) {
+                        Toast.makeText(MainActivity.this, "Completar hábito: " + habito.getNombre(), Toast.LENGTH_SHORT).show();
+                        registrarSeguimiento(habito);
+                    }
+                }
+        );
 
         recyclerHabitos.setAdapter(habitoAdapter);
     }
 
     private void registrarSeguimiento(Habito habito) {
         int idUsuario = SharedPreferencesManager.getInstance(this).getUserId();
-        String fechaHoy = LocalDate.now().toString(); // YYYY-MM-DD
+        String fechaHoy = LocalDate.now().toString();
 
         Seguimiento s = new Seguimiento();
         s.setIdUsuario(idUsuario);
@@ -166,9 +168,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, PerfilUsuarioActivity.class));
         } else if (id == R.id.nav_settings) {
-            Toast.makeText(this, "Abriste Configuración", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, ConfiguracionActivity.class));
         } else if (id == R.id.nav_faq) {
             Toast.makeText(this, "Abriste FAQ", Toast.LENGTH_SHORT).show();
         }

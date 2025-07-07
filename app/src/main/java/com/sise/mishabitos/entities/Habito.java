@@ -2,7 +2,10 @@ package com.sise.mishabitos.entities;
 
 import java.util.Date;
 
-public class Habito {
+import java.io.Serializable;
+
+
+public class Habito implements Serializable {
 
     private Integer idHabito;
     private Usuario usuario;
