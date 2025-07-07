@@ -16,6 +16,7 @@ import java.util.List;
 public class SeguimientoViewModel extends ViewModel {
 
     private final MutableLiveData<LiveDataResponse<List<Seguimiento>>> listarSeguimientosPorHabitoLiveData;
+    private final MutableLiveData<LiveDataResponse<List<Seguimiento>>> listarSeguimientosPorUsuarioLiveData;
     private final MutableLiveData<LiveDataResponse<List<Seguimiento>>> listarSeguimientosPorUsuarioFechaLiveData;
     private final MutableLiveData<LiveDataResponse<String>> insertarSeguimientoLiveData;
     private final MutableLiveData<LiveDataResponse<String>> actualizarSeguimientoLiveData;
@@ -25,6 +26,7 @@ public class SeguimientoViewModel extends ViewModel {
 
     public SeguimientoViewModel() {
         listarSeguimientosPorHabitoLiveData = new MutableLiveData<>();
+        listarSeguimientosPorUsuarioLiveData = new MutableLiveData<>();
         listarSeguimientosPorUsuarioFechaLiveData = new MutableLiveData<>();
         insertarSeguimientoLiveData = new MutableLiveData<>();
         actualizarSeguimientoLiveData = new MutableLiveData<>();
@@ -34,6 +36,10 @@ public class SeguimientoViewModel extends ViewModel {
 
     public LiveData<LiveDataResponse<List<Seguimiento>>> getListarSeguimientosPorHabitoLiveData() {
         return listarSeguimientosPorHabitoLiveData;
+    }
+
+    public LiveData<LiveDataResponse<List<Seguimiento>>> getListarSeguimientosPorUsuarioLiveData() {
+        return listarSeguimientosPorUsuarioLiveData;
     }
 
     public LiveData<LiveDataResponse<List<Seguimiento>>> getListarSeguimientosPorUsuarioFechaLiveData() {
@@ -65,6 +71,21 @@ public class SeguimientoViewModel extends ViewModel {
             }
         });
     }
+
+    public void listarSeguimientosPorUsuario(Context context) {
+        seguimientoRepository.listarSeguimientosPorUsuario(context, new Callback<List<Seguimiento>>() {
+            @Override
+            public void onSuccess(List<Seguimiento> result) {
+                listarSeguimientosPorUsuarioLiveData.postValue(LiveDataResponse.success(result));
+            }
+
+            @Override
+            public void onFailure() {
+                listarSeguimientosPorUsuarioLiveData.postValue(LiveDataResponse.error());
+            }
+        });
+    }
+
 
     public void listarSeguimientosPorUsuarioYFecha(Context context, String fecha) {
         seguimientoRepository.listarSeguimientosPorUsuarioYFecha(context, fecha, new Callback<List<Seguimiento>>() {

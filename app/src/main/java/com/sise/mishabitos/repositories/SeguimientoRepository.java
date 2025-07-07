@@ -57,6 +57,44 @@ public class SeguimientoRepository {
         queue.add(request);
     }
 
+    public void listarSeguimientosPorUsuario(Context context, Callback<List<Seguimiento>> callback) {
+        int idUsuario = SharedPreferencesManager.getInstance(context).getUserId();
+        String url = Constants.BASE_URL_API + "/seguimientos/usuario/" + idUsuario;
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    try {
+                        Type type = new TypeToken<BaseResponse<List<Seguimiento>>>() {}.getType();
+                        BaseResponse<List<Seguimiento>> baseResponse = new Gson().fromJson(response, type);
+
+                        if (baseResponse != null && baseResponse.isSuccess()) {
+                            callback.onSuccess(baseResponse.getData());
+                        } else {
+                            callback.onFailure();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure();
+                    }
+                },
+                error -> {
+                    error.printStackTrace();
+                    callback.onFailure();
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
+
+        queue.add(request);
+    }
+
+
     public void listarSeguimientosPorUsuarioYFecha(Context context, String fecha, Callback<List<Seguimiento>> callback) {
         int idUsuario = SharedPreferencesManager.getInstance(context).getUserId();
         String url = Constants.BASE_URL_API + "/seguimientos/usuario/" + idUsuario + "/" + fecha;

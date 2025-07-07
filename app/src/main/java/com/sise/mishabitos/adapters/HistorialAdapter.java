@@ -15,10 +15,10 @@ import java.util.List;
 
 public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.HistorialViewHolder> {
 
-    private List<Seguimiento> listaSeguimientos;
+    private List<Seguimiento> listaHistorial;
 
-    public HistorialAdapter(List<Seguimiento> listaSeguimientos) {
-        this.listaSeguimientos = listaSeguimientos;
+    public HistorialAdapter(List<Seguimiento> listaHistorial) {
+        this.listaHistorial = listaHistorial;
     }
 
     @NonNull
@@ -30,19 +30,25 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
 
     @Override
     public void onBindViewHolder(@NonNull HistorialViewHolder holder, int position) {
-        Seguimiento seguimiento = listaSeguimientos.get(position);
+        Seguimiento s = listaHistorial.get(position);
 
-        holder.txtNombreHabito.setText(seguimiento.getHabito().getNombre());
-        holder.txtFechaSeguimiento.setText("Fecha: " + seguimiento.getFechaSeguimiento());
-        holder.txtEstadoSeguimiento.setText(seguimiento.isCompletado() ? "✅ Completado" : "❌ No completado");
+        holder.txtNombreHabito.setText(s.getHabito().getNombre());
+        holder.txtFechaSeguimiento.setText(s.getFecha());
+        holder.txtEstadoSeguimiento.setText(s.getEstado() ? "✅ Completado" : "❌ Incompleto");
     }
 
     @Override
     public int getItemCount() {
-        return listaSeguimientos.size();
+        return listaHistorial.size();
     }
 
-    public static class HistorialViewHolder extends RecyclerView.ViewHolder {
+    public void actualizarLista(List<Seguimiento> nuevaLista) {
+        this.listaHistorial.clear();
+        this.listaHistorial.addAll(nuevaLista);
+        notifyDataSetChanged();
+    }
+
+    static class HistorialViewHolder extends RecyclerView.ViewHolder {
         TextView txtNombreHabito, txtFechaSeguimiento, txtEstadoSeguimiento;
 
         public HistorialViewHolder(@NonNull View itemView) {

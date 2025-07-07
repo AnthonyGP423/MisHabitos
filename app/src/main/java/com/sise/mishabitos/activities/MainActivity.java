@@ -68,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void inicializarUI() {
         Button btnOtraFrase = findViewById(R.id.btn_otra_frase);
         btnOtraFrase.setOnClickListener(v -> fraseViewModel.listarFrases(this));
+
+        Button btnHistorial = findViewById(R.id.btn_historial);
+        btnHistorial.setOnClickListener(v -> startActivity(new Intent(this, HistorialActivity.class)));
     }
 
     private void configurarViewModels() {
@@ -119,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerHabitos.setLayoutManager(new LinearLayoutManager(this));
 
         habitoAdapter = new HabitoAdapter(
-                this, // Context obligatorio
-                new ArrayList<>(), // Lista vacía inicial
+                this,
+                new ArrayList<>(),
                 new HabitoAdapter.OnItemClickListener() {
                     @Override
                     public void onEditarClick(Habito habito) {
