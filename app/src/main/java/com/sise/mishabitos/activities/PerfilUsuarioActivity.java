@@ -1,5 +1,6 @@
 package com.sise.mishabitos.activities;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -14,6 +15,10 @@ import com.sise.mishabitos.R;
 import com.sise.mishabitos.entities.Usuario;
 import com.sise.mishabitos.shared.SharedPreferencesManager;
 import com.sise.mishabitos.viewmodel.UsuarioViewModel;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class PerfilUsuarioActivity extends AppCompatActivity {
 
@@ -37,6 +42,8 @@ public class PerfilUsuarioActivity extends AppCompatActivity {
         btnGuardar.setOnClickListener(v -> guardarCambios());
 
         btnCerrarSesion.setOnClickListener(v -> mostrarDialogCerrarSesion());
+
+        configurarSelectorFecha();
     }
 
     private void inicializarUI() {
@@ -91,7 +98,12 @@ public class PerfilUsuarioActivity extends AppCompatActivity {
             edtNombres.setText(usuarioActual.getNombre());
             edtApellidoPaterno.setText(usuarioActual.getApellidoPaterno());
             edtApellidoMaterno.setText(usuarioActual.getApellidoMaterno());
-            edtFechaNac.setText(usuarioActual.getFechaNacimiento());
+
+            if (usuarioActual.getFechaNacimiento() != null) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String fechaFormateada = sdf.format(usuarioActual.getFechaNacimiento());
+                edtFechaNac.setText(fechaFormateada);
+            }
         }
     }
 
@@ -107,9 +119,51 @@ public class PerfilUsuarioActivity extends AppCompatActivity {
         usuarioActual.setNombre(edtNombres.getText().toString().trim());
         usuarioActual.setApellidoPaterno(edtApellidoPaterno.getText().toString().trim());
         usuarioActual.setApellidoMaterno(edtApellidoMaterno.getText().toString().trim());
-        usuarioActual.setFechaNacimiento(edtFechaNac.getText().toString().trim());
+
+        String fechaStr = edtFechaNac.getText().toString().trim();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date fechaNacimiento = sdf.parse(fechaStr);
+            usuarioActual.setFechaNacimiento(fechaNacimiento);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Formato de fecha inválido", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         usuarioViewModel.actualizarUsuario(this, usuarioActual);
+    }
+
+    private void configurarSelectorFecha() {
+        edtFechaNac.setOnClickListener(v -> mostrarDatePicker());
+    }
+
+    private void mostrarDatePicker() {
+        final Calendar calendar = Calendar.getInstance();
+
+        String fechaActualStr = edtFechaNac.getText().toString().trim();
+        if (!fechaActualStr.isEmpty()) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = sdf.parse(fechaActualStr);
+                calendar.setTime(date);
+            } catch (Exception ignored) {}
+        }
+
+        int anio = calendar.get(Calendar.YEAR);
+        int mes = calendar.get(Calendar.MONTH);
+        int dia = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                this,
+                (view, year, month, dayOfMonth) -> {
+                    String fechaSeleccionada = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
+                    edtFechaNac.setText(fechaSeleccionada);
+                },
+                anio, mes, dia
+        );
+
+        datePickerDialog.show();
     }
 
     private void mostrarDialogCerrarSesion() {

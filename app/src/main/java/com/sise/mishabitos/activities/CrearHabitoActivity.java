@@ -84,7 +84,6 @@ public class CrearHabitoActivity extends AppCompatActivity {
 
         habitoViewModel.getInsertarHabitoLiveData().observe(this, response -> {
             if (response.isSuccess()) {
-                // data = idHabito devuelto del backend
                 int idHabito = Integer.parseInt(response.getData());
                 insertarFrecuencias(idHabito);
                 Toast.makeText(this, "Hábito registrado", Toast.LENGTH_SHORT).show();

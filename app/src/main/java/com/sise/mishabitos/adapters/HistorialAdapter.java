@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sise.mishabitos.R;
 import com.sise.mishabitos.entities.Seguimiento;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.HistorialViewHolder> {
@@ -33,9 +34,18 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
         Seguimiento s = listaHistorial.get(position);
 
         holder.txtNombreHabito.setText(s.getHabito().getNombre());
-        holder.txtFechaSeguimiento.setText(s.getFecha());
+
+        if (s.getFecha() != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String fechaStr = sdf.format(s.getFecha());
+            holder.txtFechaSeguimiento.setText(fechaStr);
+        } else {
+            holder.txtFechaSeguimiento.setText("Sin fecha");
+        }
+
         holder.txtEstadoSeguimiento.setText(s.getEstadoAuditoria() ? "✅ Completado" : "❌ Incompleto");
     }
+
 
     @Override
     public int getItemCount() {

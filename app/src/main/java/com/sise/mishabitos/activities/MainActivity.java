@@ -30,6 +30,7 @@ import com.sise.mishabitos.viewmodel.SeguimientoViewModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -145,15 +146,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void registrarSeguimiento(Habito habito) {
-        int idUsuario = SharedPreferencesManager.getInstance(this).getUserId();
-        String fechaHoy = LocalDate.now().toString();
-
         Seguimiento s = new Seguimiento();
-        s.setIdUsuario(idUsuario);
-        s.setIdHabito(habito.getIdHabito());
-        s.setFecha(fechaHoy);
-        s.setEstado(true);
-
+        s.setHabito(habito);
+        s.setFecha(new Date());
+        s.setCompletado(true);
         seguimientoViewModel.insertarSeguimiento(this, s);
     }
 

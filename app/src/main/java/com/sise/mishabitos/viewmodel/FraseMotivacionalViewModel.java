@@ -41,12 +41,11 @@ public class FraseMotivacionalViewModel extends ViewModel {
         return eliminarFraseLiveData;
     }
 
-    // Métodos de acción
     public void listarFrases(Context context) {
         repository.listarFraseMotivacional(context, new Callback<String>() {
             @Override
             public void onSuccess(String result) {
-                fraseDelDiaLiveData.postValue(result); // ✅ SOLO esto para mostrar frase
+                fraseDelDiaLiveData.postValue(result);
             }
 
             @Override

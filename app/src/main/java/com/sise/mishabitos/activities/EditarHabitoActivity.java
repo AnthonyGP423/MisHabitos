@@ -168,7 +168,6 @@ public class EditarHabitoActivity extends AppCompatActivity {
     }
 
     private void guardarCambios() {
-        // 1️⃣ Actualiza datos del hábito
         habitoActual.setNombre(edtNombre.getText().toString());
         habitoActual.setDescripcion(edtDescripcion.getText().toString());
         Categoria nuevaCategoria = listaCategorias.get(spCategoria.getSelectedItemPosition());

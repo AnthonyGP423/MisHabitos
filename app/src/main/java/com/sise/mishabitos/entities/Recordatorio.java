@@ -5,7 +5,7 @@ import java.util.Date;
 public class Recordatorio {
 
     private Integer idRecordatorio;
-    private Habito habito; // Relación con la clase Habito
+    private Habito habito;
     private String hora; // Formato "HH:mm"
     private String mensaje;
     private Boolean activo;

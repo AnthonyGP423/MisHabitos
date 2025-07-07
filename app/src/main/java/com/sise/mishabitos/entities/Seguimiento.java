@@ -9,7 +9,6 @@ public class Seguimiento {
     private Date fecha;
     private Boolean completado;
     private String notaDia;
-    private Date fechaRegistro;
     private Date fechaCreacion;
     private Boolean estadoAuditoria;
 
@@ -53,14 +52,6 @@ public class Seguimiento {
 
     public void setNotaDia(String notaDia) {
         this.notaDia = notaDia;
-    }
-
-    public Date getFechaRegistro() {
-        return fechaRegistro;
-    }
-
-    public void setFechaRegistro(Date fechaRegistro) {
-        this.fechaRegistro = fechaRegistro;
     }
 
     public Date getFechaCreacion() {
