@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         int userId = SharedPreferencesManager.getInstance(this).getUserId();
+
         habitoViewModel.listarHabitosPorUsuario(this, userId);
 
         seguimientoViewModel.getInsertarSeguimientoLiveData().observe(this, response -> {

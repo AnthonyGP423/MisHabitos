@@ -25,7 +25,6 @@ public class SharedPreferencesManager {
         return instance;
     }
 
-    // ---------- Sesión ----------
     public void saveToken(String token) {
         prefs.edit().putString(KEY_TOKEN, token).apply();
     }
@@ -54,13 +53,12 @@ public class SharedPreferencesManager {
         prefs.edit().clear().apply();
     }
 
-    // ---------- Configuración ----------
     public void saveNotificaciones(boolean value) {
         prefs.edit().putBoolean(KEY_NOTIFICACIONES, value).apply();
     }
 
     public boolean getNotificaciones() {
-        return prefs.getBoolean(KEY_NOTIFICACIONES, true); // true por defecto
+        return prefs.getBoolean(KEY_NOTIFICACIONES, true);
     }
 
     public void saveModoOscuro(boolean value) {
@@ -68,6 +66,6 @@ public class SharedPreferencesManager {
     }
 
     public boolean getModoOscuro() {
-        return prefs.getBoolean(KEY_MODO_OSCURO, false); // false por defecto
+        return prefs.getBoolean(KEY_MODO_OSCURO, false);
     }
 }

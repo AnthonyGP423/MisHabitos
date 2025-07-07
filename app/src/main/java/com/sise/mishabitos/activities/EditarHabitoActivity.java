@@ -50,7 +50,6 @@ public class EditarHabitoActivity extends AppCompatActivity {
         inicializarUI();
         inicializarViewModels();
 
-        // Recibe el hábito desde el Intent
         habitoActual = (Habito) getIntent().getSerializableExtra("habito");
         if (habitoActual == null) {
             Toast.makeText(this, "Error: Hábito no encontrado", Toast.LENGTH_SHORT).show();
@@ -106,7 +105,7 @@ public class EditarHabitoActivity extends AppCompatActivity {
 
     private void observarCategorias() {
         categoriaViewModel.getListarCategoriasLiveData().observe(this, response -> {
-            if (response.getStatus() == LiveDataResponse.Status.SUCCESS) {
+            if (response.isSuccess()) {
                 listaCategorias = response.getData();
                 List<String> nombres = new ArrayList<>();
                 for (Categoria c : listaCategorias) {
@@ -117,7 +116,7 @@ public class EditarHabitoActivity extends AppCompatActivity {
                 spCategoria.setAdapter(spinnerAdapter);
 
                 for (int i = 0; i < listaCategorias.size(); i++) {
-                    if (listaCategorias.get(i).getIdCategoria() == habitoActual.getIdCategoria()) {
+                    if (listaCategorias.get(i).getIdCategoria() == habitoActual.getCategoria().getIdCategoria()) {
                         spCategoria.setSelection(i);
                         break;
                     }
@@ -132,7 +131,7 @@ public class EditarHabitoActivity extends AppCompatActivity {
 
     private void observarFrecuencias() {
         frecuenciaHabitoViewModel.getListarFrecuenciasLiveData().observe(this, response -> {
-            if (response.getStatus() == LiveDataResponse.Status.SUCCESS) {
+            if (response.isSuccess()) {
                 for (FrecuenciaHabito f : response.getData()) {
                     marcarCheckBox(f.getDiaSemana());
                 }
@@ -169,35 +168,52 @@ public class EditarHabitoActivity extends AppCompatActivity {
     }
 
     private void guardarCambios() {
+        // 1️⃣ Actualiza datos del hábito
         habitoActual.setNombre(edtNombre.getText().toString());
         habitoActual.setDescripcion(edtDescripcion.getText().toString());
-        habitoActual.setIdCategoria(listaCategorias.get(spCategoria.getSelectedItemPosition()).getIdCategoria());
+        Categoria nuevaCategoria = listaCategorias.get(spCategoria.getSelectedItemPosition());
+        habitoActual.setCategoria(nuevaCategoria);
 
         String hora = String.format("%02d:%02d:00", timePicker.getHour(), timePicker.getMinute());
         habitoActual.setHoraSugerida(hora);
 
         habitoViewModel.actualizarHabito(this, habitoActual);
 
+        /*frecuenciaHabitoViewModel.getEliminarFrecuenciaLiveData().observe(this, response -> {
+        });*/
+
         frecuenciaHabitoViewModel.getListarFrecuenciasLiveData().observe(this, response -> {
-            if (response.getStatus() == LiveDataResponse.Status.SUCCESS) {
-                for (FrecuenciaHabito f : response.getData()) {
-                    frecuenciaHabitoViewModel.eliminar(this, f.getIdFrecuencia());
+            if (response.isSuccess()) {
+                List<FrecuenciaHabito> lista = response.getData();
+
+                if (lista != null && !lista.isEmpty()) {
+                    for (FrecuenciaHabito f : lista) {
+                        frecuenciaHabitoViewModel.eliminar(this, f.getIdFrecuencia());
+                    }
                 }
 
                 for (String dia : obtenerDiasSeleccionados()) {
                     FrecuenciaHabito nueva = new FrecuenciaHabito();
-                    nueva.setIdHabito(habitoActual.getIdHabito());
+
+                    Habito h = new Habito();
+                    h.setIdHabito(habitoActual.getIdHabito());
+                    nueva.setHabito(h);
+
                     nueva.setDiaSemana(dia);
+
                     frecuenciaHabitoViewModel.insertar(this, nueva);
                 }
 
                 Toast.makeText(this, "Cambios guardados", Toast.LENGTH_SHORT).show();
                 finish();
+            } else {
+                Toast.makeText(this, "Error al listar frecuencias", Toast.LENGTH_SHORT).show();
             }
         });
 
         frecuenciaHabitoViewModel.listarPorHabito(this, habitoActual.getIdHabito());
     }
+
 
     private void eliminarHabito() {
         habitoViewModel.eliminarHabito(this, habitoActual.getIdHabito());

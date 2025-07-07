@@ -97,7 +97,7 @@ public class CrearHabitoActivity extends AppCompatActivity {
 
     private void observarCategorias() {
         categoriaViewModel.getListarCategoriasLiveData().observe(this, response -> {
-            if (response.getStatus() == com.sise.mishabitos.shared.LiveDataResponse.Status.SUCCESS) {
+            if (response.isSuccess()) {
                 listaCategorias = response.getData();
                 List<String> nombres = new ArrayList<>();
                 for (Categoria c : listaCategorias) {
@@ -147,8 +147,13 @@ public class CrearHabitoActivity extends AppCompatActivity {
         List<String> dias = obtenerDiasSeleccionados();
         for (String dia : dias) {
             FrecuenciaHabito f = new FrecuenciaHabito();
-            f.setIdHabito(idHabito);
+
+            Habito habito = new Habito();
+            habito.setIdHabito(idHabito);
+
+            f.setHabito(habito);
             f.setDiaSemana(dia);
+
             frecuenciaHabitoViewModel.insertar(this, f);
         }
     }

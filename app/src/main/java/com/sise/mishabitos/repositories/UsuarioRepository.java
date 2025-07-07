@@ -97,7 +97,7 @@ public class UsuarioRepository {
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
                     try {
-                        Type tipo = new TypeToken<BaseResponse<String>>(){}.getType();
+                        Type tipo = new TypeToken<BaseResponse<String>>() {}.getType();
                         BaseResponse<String> baseResponse = gson.fromJson(response, tipo);
 
                         if (baseResponse != null && baseResponse.isSuccess()) {
@@ -112,7 +112,12 @@ public class UsuarioRepository {
                 },
                 error -> {
                     error.printStackTrace();
-                    callback.onFailure();
+
+                    if (error.networkResponse != null && error.networkResponse.statusCode == 409) {
+                        callback.onError("El correo ya está registrado");
+                    } else {
+                        callback.onFailure();
+                    }
                 }) {
             @Override
             public String getBodyContentType() {
@@ -132,6 +137,7 @@ public class UsuarioRepository {
 
         queue.add(request);
     }
+
 
     public void actualizarUsuario(Context context, Usuario usuario, Callback<String> callback) {
         String url = Constants.BASE_URL_API + "/usuarios/" + usuario.getIdUsuario();

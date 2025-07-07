@@ -16,7 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.sise.mishabitos.MainActivity;
+import com.sise.mishabitos.activities.MainActivity;
 import com.sise.mishabitos.R;
 import com.sise.mishabitos.shared.Constants;
 import com.sise.mishabitos.shared.SharedPreferencesManager;
@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        edtUsuario = findViewById(R.id.edtUsuario);
+        edtUsuario = findViewById(R.id.edtCorreo);
         edtContrasena = findViewById(R.id.edtContrasena);
         btnIniciar = findViewById(R.id.btnIniciar);
 
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             SharedPreferencesManager sp = SharedPreferencesManager.getInstance(this);
                             sp.saveToken(token);
-                            sp.saveIdUsuario(idUsuario);
+                            sp.saveUserId(idUsuario);
 
                             Toast.makeText(this, "Bienvenido, " + nombre, Toast.LENGTH_LONG).show();
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));

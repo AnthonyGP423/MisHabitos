@@ -94,8 +94,14 @@ public class UsuarioViewModel extends ViewModel {
             public void onFailure() {
                 insertarUsuarioLiveData.postValue(LiveDataResponse.error());
             }
+
+            @Override
+            public void onError(String message) {
+                insertarUsuarioLiveData.postValue(LiveDataResponse.error(message));
+            }
         });
     }
+
 
     public void actualizarUsuario(Context context, Usuario usuario) {
         usuarioRepository.actualizarUsuario(context, usuario, new Callback<String>() {
