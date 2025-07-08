@@ -31,6 +31,8 @@
             android:exported="true" />
         <activity
             android:name=".activities.HistorialActivity" />
+        <activity
+            android:name=".activities.PerfilUsuarioActivity" />
 
         <activity
             android:name=".activities.MainActivity"

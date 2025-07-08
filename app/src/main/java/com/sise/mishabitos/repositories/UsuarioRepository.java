@@ -48,6 +48,43 @@ public class UsuarioRepository {
 
         queue.add(request);
     }
+    public void obtenerUsuarioPorId(Context context, int idUsuario, Callback<Usuario> callback) {
+        String url = Constants.BASE_URL_API + "/usuarios/" + idUsuario;
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    try {
+                        Type type = new TypeToken<BaseResponse<Usuario>>() {}.getType();
+                        BaseResponse<Usuario> baseResponse = new Gson().fromJson(response, type);
+
+                        if (baseResponse != null && baseResponse.isSuccess()) {
+                            callback.onSuccess(baseResponse.getData());
+                        } else {
+                            callback.onFailure();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure();
+                    }
+                },
+                error -> {
+                    error.printStackTrace();
+                    callback.onFailure();
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                if (token != null) {
+                    headers.put("Authorization", "Bearer " + token);
+                }
+                return headers;
+            }
+        };
+
+        queue.add(request);
+    }
 
     public void listarUsuarios(Context context, Callback<List<Usuario>> callback) {
         String url = Constants.BASE_URL_API + "/usuarios";

@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, PerfilUsuarioActivity.class));
         } else if (id == R.id.nav_settings) {
             Toast.makeText(this, "Abriste Configuración", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_faq) {

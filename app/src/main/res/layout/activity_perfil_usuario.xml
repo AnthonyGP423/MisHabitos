@@ -112,13 +112,13 @@
                 android:layout_marginBottom="12dp"/>
 
             <Button
-                android:id="@+id/btnCerrarSesion"
+                android:id="@+id/btnVolverInicio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cerrar sesión"
-                android:backgroundTint="@color/rechazar_color"
-                android:textColor="@android:color/white"/>
-
+                android:text="Volver"
+                android:backgroundTint="@color/violeta"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="12dp"/>
         </LinearLayout>
     </ScrollView>
 
