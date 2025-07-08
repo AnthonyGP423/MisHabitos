@@ -111,7 +111,7 @@
                 android:textStyle="bold"
                 app:backgroundTint="@color/gris_pizarra" />
 
-            <!--<Button
+            <Button
                 android:id="@+id/btn_ver_progreso"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -120,7 +120,7 @@
                 android:text="@string/btn_ver_progreso"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                app:backgroundTint="@color/naranjal" /> -->
+                app:backgroundTint="@color/naranjal" />
 
             <Button
                 android:id="@+id/btn_historial"
@@ -131,7 +131,9 @@
                 android:text="@string/btn_historial"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
-                app:backgroundTint="@color/violeta" />
+                app:backgroundTint="@color/violeta"
+                android:enabled="true"
+                android:clickable="true"/>
 
         </LinearLayout>
 

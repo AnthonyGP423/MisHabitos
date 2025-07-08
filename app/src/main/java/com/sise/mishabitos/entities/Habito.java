@@ -1,9 +1,6 @@
 package com.sise.mishabitos.entities;
-
-import java.util.Date;
-
 import java.io.Serializable;
-
+import java.util.Date;
 
 public class Habito implements Serializable {
 
@@ -15,6 +12,7 @@ public class Habito implements Serializable {
     private String horaSugerida; // formato "HH:mm"
     private Date fechaCreacion;
     private Boolean estadoAuditoria;
+    private Integer idCategoria;
 
     // Getters y Setters
 
@@ -81,4 +79,23 @@ public class Habito implements Serializable {
     public void setEstadoAuditoria(Boolean estadoAuditoria) {
         this.estadoAuditoria = estadoAuditoria;
     }
+    public Integer getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(Integer idCategoria) {
+        this.idCategoria = idCategoria;
+    }
+
+    // Campo temporal solo para la app (no se guarda en la BD)
+    private boolean completadoLocal;
+
+    public boolean isCompletadoLocal() {
+        return completadoLocal;
+    }
+
+    public void setCompletadoLocal(boolean completadoLocal) {
+        this.completadoLocal = completadoLocal;
+    }
+
 }

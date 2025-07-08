@@ -21,8 +21,9 @@ import java.util.Map;
 
 public class HabitoRepository {
 
-    public void listarHabitosPorUsuario(Context context,int userId, Callback<List<Habito>> callback) {
-        String url = Constants.BASE_URL_API + "/habitos/usuario/" + userId;
+    public void listarHabitosPorUsuario(Context context, Callback<List<Habito>> callback) {
+        int idUsuario = SharedPreferencesManager.getInstance(context).getUserId();
+        String url = Constants.BASE_URL_API + "/habitos/usuario/" + idUsuario;
         RequestQueue queue = Volley.newRequestQueue(context);
 
         StringRequest request = new StringRequest(Request.Method.GET, url,

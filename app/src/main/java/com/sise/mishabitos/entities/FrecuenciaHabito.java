@@ -9,6 +9,7 @@ public class FrecuenciaHabito {
     private String diaSemana;
     private Date fechaCreacion;
     private Boolean estadoAuditoria;
+    private Integer idHabito;
 
     // Getters y Setters
 
@@ -50,5 +51,12 @@ public class FrecuenciaHabito {
 
     public void setEstadoAuditoria(Boolean estadoAuditoria) {
         this.estadoAuditoria = estadoAuditoria;
+    }
+    public Integer getIdHabito() {
+        return idHabito;
+    }
+
+    public void setIdHabito(Integer idHabito) {
+        this.idHabito = idHabito;
     }
 }

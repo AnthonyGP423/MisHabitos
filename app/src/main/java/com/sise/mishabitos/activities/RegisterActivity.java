@@ -1,136 +1,81 @@
 package com.sise.mishabitos.activities;
+import com.sise.mishabitos.R;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.sise.mishabitos.R;
-import com.sise.mishabitos.entities.Usuario;
-import com.sise.mishabitos.viewmodel.UsuarioViewModel;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
-
-    private EditText inputNombre, inputApellidoPaterno, inputApellidoMaterno, inputCorreo, inputPassword, inputFechaNacimiento;
-    private Button btnRegistrar, btnCancelar;
-
-    private UsuarioViewModel usuarioViewModel;
+    private EditText nombreInput, correoInput, passwordInput;
+    private Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        inputNombre = findViewById(R.id.input_nombre);
-        inputApellidoPaterno = findViewById(R.id.input_apellido_paterno);
-        inputApellidoMaterno = findViewById(R.id.input_apellido_materno);
-        inputCorreo = findViewById(R.id.input_correo);
-        inputPassword = findViewById(R.id.input_password);
-        inputFechaNacimiento = findViewById(R.id.input_fecha_nacimiento);
+        nombreInput = findViewById(R.id.input_nombre);
+        correoInput = findViewById(R.id.input_correo);
+        passwordInput = findViewById(R.id.input_password);
+        registerButton = findViewById(R.id.button_register);
 
-        btnRegistrar = findViewById(R.id.button_register);
-        btnCancelar = findViewById(R.id.button_cancelar);
-
-        usuarioViewModel = new ViewModelProvider(this).get(UsuarioViewModel.class);
-
-        btnRegistrar.setOnClickListener(v -> registrarUsuario());
-        btnCancelar.setOnClickListener(v -> finish());
-
-        configurarSelectorFecha();
-        observarResultados();
-    }
-
-    private void registrarUsuario() {
-        String nombre = inputNombre.getText().toString().trim();
-        String apellidoPaterno = inputApellidoPaterno.getText().toString().trim();
-        String apellidoMaterno = inputApellidoMaterno.getText().toString().trim();
-        String correo = inputCorreo.getText().toString().trim();
-        String contrasena = inputPassword.getText().toString().trim();
-        String fechaStr = inputFechaNacimiento.getText().toString().trim();
-
-        if (nombre.isEmpty() || correo.isEmpty() || contrasena.isEmpty() || fechaStr.isEmpty()) {
-            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Date fechaNacimiento;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            fechaNacimiento = sdf.parse(fechaStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Formato de fecha inválido", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Usuario nuevoUsuario = new Usuario();
-        nuevoUsuario.setNombre(nombre);
-        nuevoUsuario.setApellidoPaterno(apellidoPaterno);
-        nuevoUsuario.setApellidoMaterno(apellidoMaterno);
-        nuevoUsuario.setCorreo(correo);
-        nuevoUsuario.setContrasena(contrasena);
-        nuevoUsuario.setFechaNacimiento(fechaNacimiento);
-
-        usuarioViewModel.insertarUsuario(this, nuevoUsuario);
-    }
-
-    private void configurarSelectorFecha() {
-        inputFechaNacimiento.setOnClickListener(v -> mostrarDatePicker());
-    }
-
-    private void mostrarDatePicker() {
-        final Calendar calendar = Calendar.getInstance();
-
-        String fechaActualStr = inputFechaNacimiento.getText().toString().trim();
-        if (!fechaActualStr.isEmpty()) {
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = sdf.parse(fechaActualStr);
-                calendar.setTime(date);
-            } catch (Exception ignored) {
-            }
-        }
-
-        int anio = calendar.get(Calendar.YEAR);
-        int mes = calendar.get(Calendar.MONTH);
-        int dia = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                this,
-                (view, year, month, dayOfMonth) -> {
-                    String fechaSeleccionada = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
-                    inputFechaNacimiento.setText(fechaSeleccionada);
-                },
-                anio, mes, dia
-        );
-
-        datePickerDialog.show();
-    }
-
-    private void observarResultados() {
-        usuarioViewModel.getInsertarUsuarioLiveData().observe(this, response -> {
-            if (response.isSuccess()) {
-                Toast.makeText(this, "Registro exitoso", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
-            } else {
-                String mensaje = response.getMessage();
-                if (mensaje != null && !mensaje.isEmpty()) {
-                    Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Error al registrar", Toast.LENGTH_SHORT).show();
-                }
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                registerUser();
             }
         });
+    }
+
+    private void registerUser() {
+        String nombre = nombreInput.getText().toString().trim();
+        String correo = correoInput.getText().toString().trim();
+        String password = passwordInput.getText().toString().trim();
+
+        String url = "";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                response -> {
+                    Toast.makeText(RegisterActivity.this, "Registro exitoso", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    finish();
+                },
+                error -> Toast.makeText(RegisterActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show()
+        ) {
+            @Override
+            public byte[] getBody() {
+                JSONObject jsonBody = new JSONObject();
+                try {
+                    jsonBody.put("nombre", nombre);
+                    jsonBody.put("correo", correo);
+                    jsonBody.put("password", password);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return jsonBody.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(stringRequest);
     }
 }

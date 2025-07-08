@@ -1,7 +1,9 @@
 package com.sise.mishabitos.repositories;
+import org.json.JSONException;
 
 import android.content.Context;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -27,17 +29,19 @@ public class FraseMotivacionalRepository {
         StringRequest request = new StringRequest(Request.Method.GET, url,
                 response -> {
                     try {
-                        Gson gson = new Gson();
-                        Type tipo = new TypeToken<BaseResponse<FraseMotivacional>>() {}.getType();
-                        BaseResponse<FraseMotivacional> baseResponse = gson.fromJson(response, tipo);
+                        JSONObject jsonObject = new JSONObject(response);
+                        JSONArray frasesArray = jsonObject.getJSONArray("data");
 
-                        if (baseResponse != null && baseResponse.isSuccess() && baseResponse.getData() != null) {
-                            callback.onSuccess(baseResponse.getData().getFrase());
+                        if (frasesArray.length() > 0) {
+                            int randomIndex = (int) (Math.random() * frasesArray.length());  // 🎯 Índice aleatorio
+                            JSONObject fraseRandom = frasesArray.getJSONObject(randomIndex);
+                            String contenido = fraseRandom.getString("frase");
+                            callback.onSuccess(contenido);
                         } else {
                             callback.onFailure();
                         }
 
-                    } catch (Exception e) {
+                    } catch (JSONException e) {
                         e.printStackTrace();
                         callback.onFailure();
                     }
@@ -45,18 +49,23 @@ public class FraseMotivacionalRepository {
                 error -> {
                     error.printStackTrace();
                     callback.onFailure();
-                }) {
+                }
+        ) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+
                 String token = SharedPreferencesManager.getInstance(context).getToken();
-                headers.put("Authorization", "Bearer " + token);
+                headers.put("Authorization", "Bearer " + token);  // 🚀 Aquí se envía el token
+
                 return headers;
             }
         };
 
         queue.add(request);
     }
+
 
     public void insertarFraseMotivacional(Context context, FraseMotivacional frase, Callback<String> callback) {
         String url = Constants.BASE_URL_API + "/frases";

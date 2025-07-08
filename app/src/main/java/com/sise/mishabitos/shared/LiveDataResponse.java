@@ -1,53 +1,50 @@
 package com.sise.mishabitos.shared;
 
 public class LiveDataResponse<T> {
-    private boolean success;
-    private T data;
-    private String message;
 
-    public LiveDataResponse(boolean success, T data, String message) {
-        this.success = success;
-        this.data = data;
-        this.message = message;
+    public enum Status { SUCCESS, ERROR, LOADING }
+
+    private Status status;
+    private T data;
+
+    public LiveDataResponse() {
+        // Constructor vacío necesario para instancias vacías
     }
 
-    public LiveDataResponse(boolean success, T data) {
-        this(success, data, null);
+    public LiveDataResponse(Status status, T data) {
+        this.status = status;
+        this.data = data;
     }
 
     public static <T> LiveDataResponse<T> success(T data) {
-        return new LiveDataResponse<>(true, data, null);
+        return new LiveDataResponse<>(Status.SUCCESS, data);
     }
 
     public static <T> LiveDataResponse<T> error() {
-        return new LiveDataResponse<>(false, null, null);
+        return new LiveDataResponse<>(Status.ERROR, null);
     }
 
-    public static <T> LiveDataResponse<T> error(String message) {
-        return new LiveDataResponse<>(false, null, message);
+    public static <T> LiveDataResponse<T> loading() {
+        return new LiveDataResponse<>(Status.LOADING, null);
     }
 
-    public boolean isSuccess() {
-        return success;
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public T getData() {
         return data;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
     public void setData(T data) {
         this.data = data;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public boolean isSuccess() {
+        return status == Status.SUCCESS;
     }
 }

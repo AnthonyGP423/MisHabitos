@@ -1,8 +1,8 @@
 package com.sise.mishabitos.entities;
-
+import java.io.Serializable;
 import java.util.Date;
 
-public class Usuario {
+public class Usuario implements Serializable {
 
     private Integer idUsuario;
     private Rol rol;
@@ -104,5 +104,9 @@ public class Usuario {
 
     public void setEstadoAuditoria(Boolean estadoAuditoria) {
         this.estadoAuditoria = estadoAuditoria;
+    }
+    // Constructor adicional SOLO con idUsuario
+    public Usuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
 }

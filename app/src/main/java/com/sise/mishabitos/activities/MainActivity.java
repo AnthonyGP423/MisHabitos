@@ -1,15 +1,16 @@
 package com.sise.mishabitos.activities;
-
 import android.content.Intent;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -30,18 +31,26 @@ import com.sise.mishabitos.viewmodel.SeguimientoViewModel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
+    private RecyclerView recyclerHabitos;
+    private HabitoAdapter habitoAdapter;
 
     private FraseMotivacionalViewModel fraseViewModel;
     private HabitoViewModel habitoViewModel;
     private SeguimientoViewModel seguimientoViewModel;
 
-    private RecyclerView recyclerHabitos;
-    private HabitoAdapter habitoAdapter;
+    private TextView fraseMostrada;
+    private Button btnOtraFrase;
+    private Button btnVerHistorial;
+    private int idUsuario;
+    private String fechaHoy;
+
+    private List<Seguimiento> seguimientosCompletados = new ArrayList<>();
+    private List<Habito> habitosDelUsuario = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         SharedPreferencesManager sp = SharedPreferencesManager.getInstance(this);
         String token = sp.getToken();
-        int userId = sp.getUserId();
+        idUsuario = sp.getUserId();
 
-        if (token == null || token.isEmpty() || userId == -1) {
+        if (token == null || token.isEmpty() || idUsuario == -1) {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
@@ -59,21 +68,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setContentView(R.layout.activity_main);
 
+        fechaHoy = LocalDate.now().toString();
+
         inicializarUI();
         configurarViewModels();
         configurarMenuLateral();
         configurarRecyclerHabitos();
         configurarBotonFlotante();
     }
-
     private void inicializarUI() {
-        Button btnOtraFrase = findViewById(R.id.btn_otra_frase);
+        fraseMostrada = findViewById(R.id.frase_mostrada);
+        btnOtraFrase = findViewById(R.id.btn_otra_frase);
+        btnVerHistorial = findViewById(R.id.btn_historial);
+
         btnOtraFrase.setOnClickListener(v -> fraseViewModel.listarFrases(this));
 
-        Button btnHistorial = findViewById(R.id.btn_historial);
-        btnHistorial.setOnClickListener(v -> startActivity(new Intent(this, HistorialActivity.class)));
+        btnVerHistorial.setOnClickListener(v -> {
+            startActivity(new Intent(this, HistorialActivity.class));
+        });
     }
-
     private void configurarViewModels() {
         fraseViewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
         habitoViewModel = new ViewModelProvider(this).get(HabitoViewModel.class);
@@ -84,23 +97,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         habitoViewModel.getListarHabitosLiveData().observe(this, response -> {
             if (response.isSuccess()) {
-                habitoAdapter.actualizarLista(response.getData());
+                habitosDelUsuario = response.getData();
+                Log.d("MainActivity", "Hábitos obtenidos: " + habitosDelUsuario.size());
+
+                seguimientoViewModel.listarSeguimientosCompletadosPorUsuario(this, idUsuario);
             } else {
                 Toast.makeText(this, "No se pudieron cargar los hábitos", Toast.LENGTH_SHORT).show();
             }
         });
 
-        int userId = SharedPreferencesManager.getInstance(this).getUserId();
-
-        habitoViewModel.listarHabitosPorUsuario(this, userId);
+        seguimientoViewModel.getSeguimientosCompletadosLiveData().observe(this, response -> {
+            if (response.isSuccess()) {
+                seguimientosCompletados = response.getData();
+                Log.d("MainActivity", "Seguimientos COMPLETADOS recibidos: " + seguimientosCompletados.size());
+                actualizarVistaHabitos();
+            } else {
+                Toast.makeText(this, "No se pudieron cargar seguimientos completados", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         seguimientoViewModel.getInsertarSeguimientoLiveData().observe(this, response -> {
             if (response.isSuccess()) {
-                Toast.makeText(this, "Hábito completado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Hábito completado ✅", Toast.LENGTH_SHORT).show();
+                cargarDatos();
             } else {
                 Toast.makeText(this, "No se pudo marcar como completado", Toast.LENGTH_SHORT).show();
+                actualizarVistaHabitos();
             }
         });
+    }
+
+    private void cargarDatos() {
+        habitoViewModel.listarHabitosPorUsuario(this);
+        seguimientoViewModel.listarSeguimientosCompletadosPorUsuario(this, idUsuario);
+    }
+
+    private void actualizarVistaHabitos() {
+        if (habitosDelUsuario == null || habitosDelUsuario.isEmpty()) {
+            Toast.makeText(this, "No tienes hábitos aún.", Toast.LENGTH_SHORT).show();
+            habitoAdapter.actualizarLista(new ArrayList<>());
+            return;
+        }
+
+        List<Habito> habitosPendientes = new ArrayList<>();
+
+        for (Habito habito : habitosDelUsuario) {
+            boolean completado = false;
+
+            for (Seguimiento seguimiento : seguimientosCompletados) {
+                if (seguimiento.getHabito() != null &&
+                        habito.getIdHabito().equals(seguimiento.getHabito().getIdHabito()) &&
+                        Boolean.TRUE.equals(seguimiento.getCompletado())) {
+                    completado = true;
+                    break;
+                }
+            }
+
+            habito.setCompletadoLocal(completado);
+
+            if (!completado) {
+                habitosPendientes.add(habito);
+            }
+        }
+
+        habitoAdapter.actualizarLista(habitosPendientes);
     }
 
     private void configurarMenuLateral() {
@@ -111,10 +171,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar,
-                R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
     }
@@ -123,33 +181,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         recyclerHabitos = findViewById(R.id.recycler_habitos);
         recyclerHabitos.setLayoutManager(new LinearLayoutManager(this));
 
-        habitoAdapter = new HabitoAdapter(
-                this,
-                new ArrayList<>(),
-                new HabitoAdapter.OnItemClickListener() {
-                    @Override
-                    public void onEditarClick(Habito habito) {
-                        Intent intent = new Intent(MainActivity.this, EditarHabitoActivity.class);
-                        intent.putExtra("habito", habito);
-                        startActivity(intent);
-                    }
+        habitoAdapter = new HabitoAdapter(this, new ArrayList<>(), new HabitoAdapter.OnItemClickListener() {
+            @Override
+            public void onEditarClick(Habito habito) {
+                Intent intent = new Intent(MainActivity.this, EditarHabitoActivity.class);
+                intent.putExtra("habito", habito);
+                startActivity(intent);
+            }
 
-                    @Override
-                    public void onCompletarClick(Habito habito) {
-                        Toast.makeText(MainActivity.this, "Completar hábito: " + habito.getNombre(), Toast.LENGTH_SHORT).show();
-                        registrarSeguimiento(habito);
-                    }
+            @Override
+            public void onCompletarClick(Habito habito) {
+                if (!habito.isCompletadoLocal()) {
+                    mostrarDialogoNota(habito);
+                } else {
+                    Toast.makeText(MainActivity.this, "Este hábito ya fue completado ✅", Toast.LENGTH_SHORT).show();
                 }
-        );
+            }
+        });
 
         recyclerHabitos.setAdapter(habitoAdapter);
     }
 
-    private void registrarSeguimiento(Habito habito) {
+    private void registrarSeguimiento(Habito habito, String notaDia) {
         Seguimiento s = new Seguimiento();
-        s.setHabito(habito);
-        s.setFecha(new Date());
+        s.setIdUsuario(idUsuario);
+        s.setIdHabito(habito.getIdHabito());
+        s.setFecha(fechaHoy);
+        s.setEstado(true);
         s.setCompletado(true);
+        s.setNotaDia(notaDia);
+
         seguimientoViewModel.insertarSeguimiento(this, s);
     }
 
@@ -159,8 +220,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void mostrarFraseDelDia(String texto) {
-        TextView fraseMostrada = findViewById(R.id.frase_mostrada);
         fraseMostrada.setText(texto);
+    }
+
+    private void mostrarDialogoNota(Habito habito) {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Nota del Día 📝");
+
+        final EditText input = new EditText(this);
+        input.setHint("Escribe una nota (opcional)");
+        builder.setView(input);
+
+        builder.setPositiveButton("Guardar", (dialog, which) -> {
+            String nota = input.getText().toString().trim();
+            registrarSeguimiento(habito, nota.isEmpty() ? "Cumplido" : nota);
+            Toast.makeText(this, "¡Genial! Hábito completado 💪", Toast.LENGTH_SHORT).show();
+        });
+
+        builder.setNegativeButton("Cancelar", (dialog, which) -> dialog.cancel());
+
+        builder.show();
     }
 
     @Override
@@ -168,11 +247,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_profile) {
-            startActivity(new Intent(this, PerfilUsuarioActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
         } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(this, ConfiguracionActivity.class));
+            Toast.makeText(this, "Abriste Configuración", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_faq) {
             Toast.makeText(this, "Abriste FAQ", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.nav_logout) {
+            SharedPreferencesManager.getInstance(this).clearSession();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -182,8 +267,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        int userId = SharedPreferencesManager.getInstance(this).getUserId();
-        habitoViewModel.listarHabitosPorUsuario(this, userId);
+        cargarDatos();
     }
 
     @Override

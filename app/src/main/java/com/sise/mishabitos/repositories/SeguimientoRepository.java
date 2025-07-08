@@ -1,7 +1,6 @@
 package com.sise.mishabitos.repositories;
 
 import android.content.Context;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
@@ -21,6 +20,9 @@ import java.util.Map;
 
 public class SeguimientoRepository {
 
+    /**
+     * ✅ Listar seguimientos por Hábito
+     */
     public void listarSeguimientosPorHabito(Context context, int idHabito, Callback<List<Seguimiento>> callback) {
         String url = Constants.BASE_URL_API + "/seguimientos/habito/" + idHabito;
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -57,9 +59,11 @@ public class SeguimientoRepository {
         queue.add(request);
     }
 
-    public void listarSeguimientosPorUsuario(Context context, Callback<List<Seguimiento>> callback) {
-        int idUsuario = SharedPreferencesManager.getInstance(context).getUserId();
-        String url = Constants.BASE_URL_API + "/seguimientos/usuario/" + idUsuario;
+    /**
+     * Listar seguimientos por Usuario y Fecha (CORREGIDO)
+     */
+    public void listarSeguimientosPorUsuarioYFecha(Context context, int idUsuario, String fecha, Callback<List<Seguimiento>> callback) {
+        String url = Constants.BASE_URL_API + "/seguimientos/usuario/" + idUsuario + "/fecha/" + fecha;
         RequestQueue queue = Volley.newRequestQueue(context);
 
         StringRequest request = new StringRequest(Request.Method.GET, url,
@@ -94,44 +98,9 @@ public class SeguimientoRepository {
         queue.add(request);
     }
 
-
-    public void listarSeguimientosPorUsuarioYFecha(Context context, String fecha, Callback<List<Seguimiento>> callback) {
-        int idUsuario = SharedPreferencesManager.getInstance(context).getUserId();
-        String url = Constants.BASE_URL_API + "/seguimientos/usuario/" + idUsuario + "/" + fecha;
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        StringRequest request = new StringRequest(Request.Method.GET, url,
-                response -> {
-                    try {
-                        Type type = new TypeToken<BaseResponse<List<Seguimiento>>>() {}.getType();
-                        BaseResponse<List<Seguimiento>> baseResponse = new Gson().fromJson(response, type);
-
-                        if (baseResponse != null && baseResponse.isSuccess()) {
-                            callback.onSuccess(baseResponse.getData());
-                        } else {
-                            callback.onFailure();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        callback.onFailure();
-                    }
-                },
-                error -> {
-                    error.printStackTrace();
-                    callback.onFailure();
-                }) {
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                String token = SharedPreferencesManager.getInstance(context).getToken();
-                headers.put("Authorization", "Bearer " + token);
-                return headers;
-            }
-        };
-
-        queue.add(request);
-    }
-
+    /**
+     * ✅ Insertar seguimiento
+     */
     public void insertarSeguimiento(Context context, Seguimiento seguimiento, Callback<String> callback) {
         String url = Constants.BASE_URL_API + "/seguimientos";
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -142,8 +111,8 @@ public class SeguimientoRepository {
         StringRequest request = new StringRequest(Request.Method.POST, url,
                 response -> {
                     try {
-                        Type type = new TypeToken<BaseResponse<String>>() {}.getType();
-                        BaseResponse<String> baseResponse = gson.fromJson(response, type);
+                        Type type = new TypeToken<BaseResponse<Seguimiento>>() {}.getType();
+                        BaseResponse<Seguimiento> baseResponse = gson.fromJson(response, type);
 
                         if (baseResponse != null && baseResponse.isSuccess()) {
                             callback.onSuccess("Seguimiento registrado correctamente");
@@ -188,6 +157,46 @@ public class SeguimientoRepository {
         queue.add(request);
     }
 
+    public void listarSeguimientosCompletadosPorUsuario(Context context, int idUsuario, Callback<List<Seguimiento>> callback) {
+        String url = Constants.BASE_URL_API + "/seguimientos/usuario/" + idUsuario + "/completados";
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        StringRequest request = new StringRequest(Request.Method.GET, url,
+                response -> {
+                    try {
+                        Type type = new TypeToken<BaseResponse<List<Seguimiento>>>() {}.getType();
+                        BaseResponse<List<Seguimiento>> baseResponse = new Gson().fromJson(response, type);
+
+                        if (baseResponse != null && baseResponse.isSuccess()) {
+                            callback.onSuccess(baseResponse.getData());
+                        } else {
+                            callback.onFailure();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        callback.onFailure();
+                    }
+                },
+                error -> {
+                    error.printStackTrace();
+                    callback.onFailure();
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                String token = SharedPreferencesManager.getInstance(context).getToken();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
+
+        queue.add(request);
+    }
+
+
+    /**
+     * ✅ Actualizar seguimiento
+     */
     public void actualizarSeguimiento(Context context, Seguimiento seguimiento, Callback<String> callback) {
         String url = Constants.BASE_URL_API + "/seguimientos/" + seguimiento.getIdSeguimiento();
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -198,8 +207,8 @@ public class SeguimientoRepository {
         StringRequest request = new StringRequest(Request.Method.PUT, url,
                 response -> {
                     try {
-                        Type tipo = new TypeToken<BaseResponse<String>>() {}.getType();
-                        BaseResponse<String> baseResponse = gson.fromJson(response, tipo);
+                        Type type = new TypeToken<BaseResponse<String>>() {}.getType();
+                        BaseResponse<String> baseResponse = gson.fromJson(response, type);
 
                         if (baseResponse != null && baseResponse.isSuccess()) {
                             callback.onSuccess("Seguimiento actualizado correctamente");
@@ -215,6 +224,7 @@ public class SeguimientoRepository {
                     error.printStackTrace();
                     callback.onFailure();
                 }) {
+
             @Override
             public String getBodyContentType() {
                 return "application/json; charset=utf-8";
@@ -243,6 +253,9 @@ public class SeguimientoRepository {
         queue.add(request);
     }
 
+    /**
+     * ✅ Eliminar seguimiento
+     */
     public void eliminarSeguimiento(Context context, int idSeguimiento, Callback<String> callback) {
         String url = Constants.BASE_URL_API + "/seguimientos/" + idSeguimiento;
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -250,8 +263,8 @@ public class SeguimientoRepository {
         StringRequest request = new StringRequest(Request.Method.DELETE, url,
                 response -> {
                     try {
-                        Type tipo = new TypeToken<BaseResponse<String>>() {}.getType();
-                        BaseResponse<String> baseResponse = new Gson().fromJson(response, tipo);
+                        Type type = new TypeToken<BaseResponse<Seguimiento>>() {}.getType();
+                        BaseResponse<Seguimiento> baseResponse = new Gson().fromJson(response, type);
 
                         if (baseResponse != null && baseResponse.isSuccess()) {
                             callback.onSuccess("Seguimiento eliminado correctamente");
@@ -278,5 +291,4 @@ public class SeguimientoRepository {
 
         queue.add(request);
     }
-
 }

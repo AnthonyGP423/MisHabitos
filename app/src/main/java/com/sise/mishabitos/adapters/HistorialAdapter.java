@@ -11,15 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sise.mishabitos.R;
 import com.sise.mishabitos.entities.Seguimiento;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.HistorialViewHolder> {
 
-    private List<Seguimiento> listaHistorial;
+    private List<Seguimiento> listaSeguimientos;
 
-    public HistorialAdapter(List<Seguimiento> listaHistorial) {
-        this.listaHistorial = listaHistorial;
+    public HistorialAdapter(List<Seguimiento> listaSeguimientos) {
+        this.listaSeguimientos = listaSeguimientos;
     }
 
     @NonNull
@@ -31,34 +30,32 @@ public class HistorialAdapter extends RecyclerView.Adapter<HistorialAdapter.Hist
 
     @Override
     public void onBindViewHolder(@NonNull HistorialViewHolder holder, int position) {
-        Seguimiento s = listaHistorial.get(position);
+        Seguimiento seguimiento = listaSeguimientos.get(position);
 
-        holder.txtNombreHabito.setText(s.getHabito().getNombre());
-
-        if (s.getFecha() != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            String fechaStr = sdf.format(s.getFecha());
-            holder.txtFechaSeguimiento.setText(fechaStr);
+        // Verificación por si el hábito no viene en la respuesta (evitar crash)
+        if (seguimiento.getHabito() != null) {
+            holder.txtNombreHabito.setText(seguimiento.getHabito().getNombre());
         } else {
-            holder.txtFechaSeguimiento.setText("Sin fecha");
+            holder.txtNombreHabito.setText("Hábito desconocido");
         }
 
-        holder.txtEstadoSeguimiento.setText(s.getEstadoAuditoria() ? "✅ Completado" : "❌ Incompleto");
-    }
+        holder.txtFechaSeguimiento.setText("Fecha: " + (seguimiento.getFecha() != null ? seguimiento.getFecha() : "Sin fecha"));
 
+        boolean completado = seguimiento.getCompletado() != null && seguimiento.getCompletado();
+        holder.txtEstadoSeguimiento.setText(completado ? "Completado" : "No completado");
+    }
 
     @Override
     public int getItemCount() {
-        return listaHistorial.size();
+        return listaSeguimientos != null ? listaSeguimientos.size() : 0;
     }
 
     public void actualizarLista(List<Seguimiento> nuevaLista) {
-        this.listaHistorial.clear();
-        this.listaHistorial.addAll(nuevaLista);
+        this.listaSeguimientos = nuevaLista;
         notifyDataSetChanged();
     }
 
-    static class HistorialViewHolder extends RecyclerView.ViewHolder {
+    public static class HistorialViewHolder extends RecyclerView.ViewHolder {
         TextView txtNombreHabito, txtFechaSeguimiento, txtEstadoSeguimiento;
 
         public HistorialViewHolder(@NonNull View itemView) {

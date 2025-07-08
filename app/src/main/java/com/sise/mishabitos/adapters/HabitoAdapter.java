@@ -1,27 +1,31 @@
 package com.sise.mishabitos.adapters;
 
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sise.mishabitos.R;
-import com.sise.mishabitos.activities.EditarHabitoActivity;
 import com.sise.mishabitos.entities.Habito;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HabitoAdapter extends RecyclerView.Adapter<HabitoAdapter.HabitoViewHolder> {
 
+    private static final String TAG = "HabitoAdapter";
+
     private List<Habito> listaHabitos;
-    private Context context;
-    private OnItemClickListener listener;
+    private final Context context;
+    private final OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onEditarClick(Habito habito);
@@ -30,7 +34,7 @@ public class HabitoAdapter extends RecyclerView.Adapter<HabitoAdapter.HabitoView
 
     public HabitoAdapter(Context context, List<Habito> listaHabitos, OnItemClickListener listener) {
         this.context = context;
-        this.listaHabitos = listaHabitos;
+        this.listaHabitos = listaHabitos != null ? listaHabitos : new ArrayList<>();
         this.listener = listener;
     }
 
@@ -44,18 +48,39 @@ public class HabitoAdapter extends RecyclerView.Adapter<HabitoAdapter.HabitoView
     @Override
     public void onBindViewHolder(@NonNull HabitoViewHolder holder, int position) {
         Habito habito = listaHabitos.get(position);
+
         holder.txtNombre.setText(habito.getNombre());
         holder.txtDescripcion.setText(habito.getDescripcion());
         holder.txtHora.setText("Hora: " + habito.getHoraSugerida());
 
+        boolean completado = habito.isCompletadoLocal();
+
+        if (completado) {
+            holder.itemView.setBackgroundColor(Color.parseColor("#A5D6A7"));  // Verde
+            holder.btnCompletar.setText("Completado ✅");
+            holder.btnCompletar.setEnabled(false);
+            holder.btnCompletar.setAlpha(0.5f);
+        } else {
+            holder.itemView.setBackgroundColor(Color.WHITE);
+            holder.btnCompletar.setText("Completar");
+            holder.btnCompletar.setEnabled(true);
+            holder.btnCompletar.setAlpha(1f);
+        }
+
         holder.btnEditar.setOnClickListener(v -> listener.onEditarClick(habito));
 
-        holder.btnCompletar.setOnClickListener(v -> listener.onCompletarClick(habito));
+        holder.btnCompletar.setOnClickListener(v -> {
+            if (!habito.isCompletadoLocal()) {
+                listener.onCompletarClick(habito);
+            } else {
+                Toast.makeText(context, "Este hábito ya fue completado hoy ✅", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return listaHabitos.size();
+        return listaHabitos != null ? listaHabitos.size() : 0;
     }
 
     public static class HabitoViewHolder extends RecyclerView.ViewHolder {
@@ -72,9 +97,14 @@ public class HabitoAdapter extends RecyclerView.Adapter<HabitoAdapter.HabitoView
         }
     }
 
-    public void actualizarLista(List<Habito> nuevaLista) {
-        this.listaHabitos.clear();
-        this.listaHabitos.addAll(nuevaLista);
+    public void actualizarLista(List<Habito> nuevosHabitos) {
+        if (nuevosHabitos == null) {
+            Log.d(TAG, "Lista recibida es null, se asignará lista vacía.");
+            this.listaHabitos = new ArrayList<>();
+        } else {
+            Log.d(TAG, "Actualizando lista de hábitos con " + nuevosHabitos.size() + " elementos.");
+            this.listaHabitos = nuevosHabitos;
+        }
         notifyDataSetChanged();
     }
 }

@@ -1,8 +1,8 @@
 package com.sise.mishabitos.entities;
-
+import java.io.Serializable;
 import java.util.Date;
 
-public class Categoria {
+public class Categoria implements Serializable{
 
     private Integer idCategoria;
     private String nombre;

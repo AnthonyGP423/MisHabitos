@@ -37,4 +37,8 @@
     <string name="icon_google">Google</string>
     <string name="icon_facebook">Facebook</string>
 
+    <!-- Actividad Boton Habito -->
+    <string name="btn_guardar_habito">Guardar Cambios</string>
+    <string name="btn_eliminar_habito">Eliminar Hábito</string>
+
 </resources>

@@ -1,14 +1,20 @@
 package com.sise.mishabitos.entities;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Seguimiento {
+public class Seguimiento implements Serializable {  // Opcional: Serializable si lo necesitas enviar por Intent
 
     private Integer idSeguimiento;
+    private Integer idUsuario;
+    private Integer idHabito;
+    private String fecha;
+    private Boolean estado;
+
     private Habito habito;
-    private Date fecha;
     private Boolean completado;
     private String notaDia;
+    private Date fechaRegistro;
     private Date fechaCreacion;
     private Boolean estadoAuditoria;
 
@@ -22,20 +28,44 @@ public class Seguimiento {
         this.idSeguimiento = idSeguimiento;
     }
 
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public Integer getIdHabito() {
+        return idHabito;
+    }
+
+    public void setIdHabito(Integer idHabito) {
+        this.idHabito = idHabito;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public Boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Boolean estado) {
+        this.estado = estado;
+    }
+
     public Habito getHabito() {
         return habito;
     }
 
     public void setHabito(Habito habito) {
         this.habito = habito;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
     }
 
     public Boolean getCompletado() {
@@ -45,13 +75,20 @@ public class Seguimiento {
     public void setCompletado(Boolean completado) {
         this.completado = completado;
     }
-
     public String getNotaDia() {
         return notaDia;
     }
 
     public void setNotaDia(String notaDia) {
         this.notaDia = notaDia;
+    }
+
+    public Date getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(Date fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 
     public Date getFechaCreacion() {

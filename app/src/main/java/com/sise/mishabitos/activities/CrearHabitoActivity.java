@@ -1,7 +1,9 @@
 package com.sise.mishabitos.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -10,56 +12,66 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import android.text.Editable;
+import android.text.TextWatcher;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.sise.mishabitos.R;
 import com.sise.mishabitos.entities.Categoria;
-import com.sise.mishabitos.entities.FrecuenciaHabito;
 import com.sise.mishabitos.entities.Habito;
 import com.sise.mishabitos.entities.Usuario;
+import com.sise.mishabitos.repositories.CategoriaRepository;
+import com.sise.mishabitos.repositories.HabitoRepository;
+import com.sise.mishabitos.shared.Callback;
 import com.sise.mishabitos.shared.SharedPreferencesManager;
-import com.sise.mishabitos.viewmodel.CategoriaViewModel;
-import com.sise.mishabitos.viewmodel.FrecuenciaHabitoViewModel;
-import com.sise.mishabitos.viewmodel.HabitoViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class CrearHabitoActivity extends AppCompatActivity {
-
-    private EditText txtNombreHabito, txtDetallesHabito;
+    private int idCategoriaSeleccionada = -1;  // "ninguna seleccionada"
     private Spinner spCategoria;
+    private Button btnAgregarTarea, btnCancelarTarea;
+    private EditText txtNombreHabito, txtDetallesHabito;
     private TimePicker timePicker;
     private Switch swAlarma;
     private CheckBox cbLunes, cbMartes, cbMiercoles, cbJueves, cbViernes, cbSabado, cbDomingo;
-    private Button btnAgregar, btnCancelar;
-
-    private CategoriaViewModel categoriaViewModel;
-    private HabitoViewModel habitoViewModel;
-    private FrecuenciaHabitoViewModel frecuenciaHabitoViewModel;
 
     private List<Categoria> listaCategorias = new ArrayList<>();
-    private ArrayAdapter<String> spinnerAdapter;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_crear_habito);
 
-        inicializarUI();
-        inicializarViewModels();
-        observarCategorias();
-        cargarCategorias();
-    }
+        View rootView = findViewById(R.id.drawer_layout);
+        if (rootView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(rootView, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
 
-    private void inicializarUI() {
+        // Inicializar views
+        spCategoria = findViewById(R.id.spCategoria);
+        btnAgregarTarea = findViewById(R.id.btnAgregarTarea);
+        btnCancelarTarea = findViewById(R.id.btnCancelarTarea);
         txtNombreHabito = findViewById(R.id.txtNombreHabito);
         txtDetallesHabito = findViewById(R.id.txtDetallesHabito);
-        spCategoria = findViewById(R.id.spCategoria);
         timePicker = findViewById(R.id.horadelatarea);
+        timePicker.setHour(9);
+        timePicker.setMinute(0);
         swAlarma = findViewById(R.id.swAlarma);
 
         cbLunes = findViewById(R.id.cbLunes);
@@ -70,102 +82,106 @@ public class CrearHabitoActivity extends AppCompatActivity {
         cbSabado = findViewById(R.id.cbSabado);
         cbDomingo = findViewById(R.id.cbDomingo);
 
-        btnAgregar = findViewById(R.id.btnAgregarTarea);
-        btnCancelar = findViewById(R.id.btnCancelarTarea);
+        btnAgregarTarea.setEnabled(false);
 
-        btnAgregar.setOnClickListener(v -> guardarHabito());
-        btnCancelar.setOnClickListener(v -> finish());
-    }
+        btnCancelarTarea.setOnClickListener(v -> finish());
 
-    private void inicializarViewModels() {
-        categoriaViewModel = new ViewModelProvider(this).get(CategoriaViewModel.class);
-        habitoViewModel = new ViewModelProvider(this).get(HabitoViewModel.class);
-        frecuenciaHabitoViewModel = new ViewModelProvider(this).get(FrecuenciaHabitoViewModel.class);
-
-        habitoViewModel.getInsertarHabitoLiveData().observe(this, response -> {
-            if (response.isSuccess()) {
-                int idHabito = Integer.parseInt(response.getData());
-                insertarFrecuencias(idHabito);
-                Toast.makeText(this, "Hábito registrado", Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                Toast.makeText(this, "Error al registrar hábito", Toast.LENGTH_SHORT).show();
-            }
+        txtNombreHabito.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { validarFormulario(); }
+            @Override public void afterTextChanged(Editable s) { }
         });
-    }
 
-    private void observarCategorias() {
-        categoriaViewModel.getListarCategoriasLiveData().observe(this, response -> {
-            if (response.isSuccess()) {
-                listaCategorias = response.getData();
-                List<String> nombres = new ArrayList<>();
-                for (Categoria c : listaCategorias) {
-                    nombres.add(c.getNombre());
+        spCategoria.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { validarFormulario();
+                // actualizamos la categoría seleccionada
+                if (position >= 0 && position < listaCategorias.size()) {
+                    idCategoriaSeleccionada = listaCategorias.get(position).getIdCategoria();
                 }
-                spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, nombres);
-                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spCategoria.setAdapter(spinnerAdapter);
             }
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
         });
+
+        btnAgregarTarea.setOnClickListener(v -> guardarHabito());
+
+        cargarCategorias();
+    }
+
+    private void validarFormulario() {
+        String nombre = txtNombreHabito.getText().toString().trim();
+        boolean categoriaSeleccionada = spCategoria.getSelectedItemPosition() != AdapterView.INVALID_POSITION;
+        btnAgregarTarea.setEnabled(!nombre.isEmpty() && categoriaSeleccionada);
     }
 
     private void cargarCategorias() {
-        categoriaViewModel.listarCategorias(this);
+        CategoriaRepository categoriaRepo = new CategoriaRepository();
+
+        categoriaRepo.listarCategorias(this, new Callback<List<Categoria>>() {
+            @Override
+            public void onSuccess(List<Categoria> categorias) {
+                listaCategorias = categorias;
+                List<String> nombresCategorias = new ArrayList<>();
+                for (Categoria cat : categorias) {
+                    nombresCategorias.add(cat.getNombre());
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(CrearHabitoActivity.this, android.R.layout.simple_spinner_item, nombresCategorias);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spCategoria.setAdapter(adapter);
+
+                validarFormulario();
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(CrearHabitoActivity.this, "No se pudieron cargar las categorías 😢", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void guardarHabito() {
         String nombre = txtNombreHabito.getText().toString().trim();
         String descripcion = txtDetallesHabito.getText().toString().trim();
 
-        if (nombre.isEmpty() || descripcion.isEmpty()) {
-            Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        int hora = timePicker.getHour();
+        int minuto = timePicker.getMinute();
+        String horaFormateada = String.format(Locale.getDefault(), "%02d:%02d:00", hora, minuto);
 
-        Habito nuevoHabito = new Habito();
-        Usuario usuario = new Usuario();
-        usuario.setIdUsuario(SharedPreferencesManager.getInstance(this).getUserId());
-        nuevoHabito.setUsuario(usuario);
+        int idUsuario = SharedPreferencesManager.getInstance(this).getUserId();
 
-        Categoria categoriaSeleccionada = listaCategorias.get(spCategoria.getSelectedItemPosition());
-        nuevoHabito.setCategoria(categoriaSeleccionada);
+        Habito habito = new Habito();
+        habito.setNombre(nombre);
+        habito.setDescripcion(descripcion);
+        habito.setHoraSugerida(horaFormateada);
+        habito.setFechaCreacion(new Date());
+        habito.setEstadoAuditoria(true);
 
-        nuevoHabito.setNombre(nombre);
-        nuevoHabito.setDescripcion(descripcion);
+        //Asignar usuario COMPLETO
+        Usuario usuario = new Usuario(idUsuario);
+        habito.setUsuario(usuario);
 
-        String hora = String.format("%02d:%02d:00", timePicker.getHour(), timePicker.getMinute());
-        nuevoHabito.setHoraSugerida(hora);
+        // Asignar categoría COMPLETA
+        Categoria categoria = new Categoria();
+        categoria.setIdCategoria(idCategoriaSeleccionada);
+        habito.setCategoria(categoria);
 
-        nuevoHabito.setEstadoAuditoria(true);
-        nuevoHabito.setFechaCreacion(new Date());
+        HabitoRepository repo = new HabitoRepository();
 
-        habitoViewModel.insertarHabito(this, nuevoHabito);
-    }
+        // Debug opcional
+        String jsonDebug = new com.google.gson.Gson().toJson(habito);
+        System.out.println("DEBUG HABITO JSON: " + jsonDebug);
 
-    private void insertarFrecuencias(int idHabito) {
-        List<String> dias = obtenerDiasSeleccionados();
-        for (String dia : dias) {
-            FrecuenciaHabito f = new FrecuenciaHabito();
+        repo.insertarHabito(this, habito, new Callback<String>() {
+            @Override
+            public void onSuccess(String mensaje) {
+                Toast.makeText(CrearHabitoActivity.this, mensaje, Toast.LENGTH_SHORT).show();
+                finish();
+            }
 
-            Habito habito = new Habito();
-            habito.setIdHabito(idHabito);
-
-            f.setHabito(habito);
-            f.setDiaSemana(dia);
-
-            frecuenciaHabitoViewModel.insertar(this, f);
-        }
-    }
-
-    private List<String> obtenerDiasSeleccionados() {
-        List<String> dias = new ArrayList<>();
-        if (cbLunes.isChecked()) dias.add("Lunes");
-        if (cbMartes.isChecked()) dias.add("Martes");
-        if (cbMiercoles.isChecked()) dias.add("Miércoles");
-        if (cbJueves.isChecked()) dias.add("Jueves");
-        if (cbViernes.isChecked()) dias.add("Viernes");
-        if (cbSabado.isChecked()) dias.add("Sábado");
-        if (cbDomingo.isChecked()) dias.add("Domingo");
-        return dias;
+            @Override
+            public void onFailure() {
+                Toast.makeText(CrearHabitoActivity.this, "Error al guardar hábito ❌", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
