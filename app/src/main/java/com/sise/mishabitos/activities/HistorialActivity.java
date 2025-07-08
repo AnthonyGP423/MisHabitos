@@ -1,7 +1,9 @@
 package com.sise.mishabitos.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +26,7 @@ public class HistorialActivity extends AppCompatActivity {
     private HistorialAdapter historialAdapter;
     private SeguimientoViewModel seguimientoViewModel;
     private int idUsuario;
+    private Button btnVolverMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +36,13 @@ public class HistorialActivity extends AppCompatActivity {
         inicializarUI();
         configurarRecycler();
         configurarViewModel();
-        cargarHistorial();
+        configurarBotonVolver();
     }
 
     private void inicializarUI() {
         recyclerHistorial = findViewById(R.id.recyclerHistorial);
         txtHistorialVacio = findViewById(R.id.txtHistorialVacio);
+        btnVolverMain = findViewById(R.id.btn_volver_main);
 
         idUsuario = SharedPreferencesManager.getInstance(this).getUserId();
     }
@@ -54,25 +58,25 @@ public class HistorialActivity extends AppCompatActivity {
 
         seguimientoViewModel.getSeguimientosCompletadosLiveData().observe(this, response -> {
             if (response != null && response.isSuccess() && response.getData() != null && !response.getData().isEmpty()) {
-                mostrarHistorial(response.getData());
+                List<Seguimiento> lista = response.getData();
+                historialAdapter.actualizarLista(lista);
+                recyclerHistorial.setVisibility(View.VISIBLE);
+                txtHistorialVacio.setVisibility(View.GONE);
             } else {
-                mostrarSinRegistros();
+                recyclerHistorial.setVisibility(View.GONE);
+                txtHistorialVacio.setVisibility(View.VISIBLE);
             }
         });
-    }
 
-    private void cargarHistorial() {
         seguimientoViewModel.listarSeguimientosCompletadosPorUsuario(this, idUsuario);
     }
 
-    private void mostrarHistorial(List<Seguimiento> lista) {
-        historialAdapter.actualizarLista(lista);
-        recyclerHistorial.setVisibility(View.VISIBLE);
-        txtHistorialVacio.setVisibility(View.GONE);
-    }
-
-    private void mostrarSinRegistros() {
-        recyclerHistorial.setVisibility(View.GONE);
-        txtHistorialVacio.setVisibility(View.VISIBLE);
+    private void configurarBotonVolver() {
+        btnVolverMain.setOnClickListener(v -> {
+            Intent intent = new Intent(HistorialActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+            finish();
+        });
     }
 }

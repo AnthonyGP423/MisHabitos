@@ -126,14 +126,8 @@
                 android:id="@+id/btn_historial"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/separar_btn_top"
-                android:background="@drawable/redondear_button_morado"
-                android:text="@string/btn_historial"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                app:backgroundTint="@color/violeta"
-                android:enabled="true"
-                android:clickable="true"/>
+                android:text="Historial"
+                android:enabled="true" />
 
         </LinearLayout>
 
