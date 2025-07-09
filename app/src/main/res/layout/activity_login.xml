@@ -60,30 +60,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/margin_top_input_contrasena" />
 
-            <TextView
-                android:id="@+id/txtRegistro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/texto_no_cuenta"
-                style="@style/TextoSecundario"
-                app:layout_constraintTop_toBottomOf="@id/edtContrasena"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="@dimen/margin_top_input_contrasena" />
-
-            <TextView
-                android:id="@+id/txtRegistrate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/texto_registrate"
-                style="@style/TextoRegistroLink"
-                android:clickable="true"
-                android:focusable="true"
-                app:layout_constraintTop_toTopOf="@id/txtRegistro"
-                app:layout_constraintStart_toEndOf="@id/txtRegistro"
-                android:layout_marginStart="4dp" />
-
-
-
             <Button
                 android:id="@+id/btnIniciar"
                 android:layout_width="0dp"
@@ -92,11 +68,62 @@
                 android:textStyle="bold"
                 android:textColor="@android:color/white"
                 app:backgroundTint="@color/azulado"
-                app:layout_constraintTop_toBottomOf="@id/txtRegistrate"
+                app:layout_constraintTop_toBottomOf="@id/edtContrasena"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/txtRegistro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¿No tienes cuenta?"
+                style="@style/TextoSecundario"
+                app:layout_constraintTop_toBottomOf="@id/btnIniciar"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp" />
+
+            <TextView
+                android:id="@+id/txtRegistrate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Regístrate ahora"
+                style="@style/TextoRegistroLink"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintTop_toTopOf="@id/txtRegistro"
+                app:layout_constraintStart_toEndOf="@id/txtRegistro"
+                android:layout_marginStart="4dp" />
+
+            <ImageButton
+                android:id="@+id/btnGoogle"
+                style="@style/BotonRedSocial"
+                android:src="@drawable/google_icon"
+                android:contentDescription="@string/icon_google"
+                app:layout_constraintTop_toBottomOf="@id/txtRegistro"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"/>
+
+            <ImageButton
+                android:id="@+id/btnFacebook"
+                style="@style/BotonRedSocial"
+                android:src="@drawable/facebook_icon"
+                android:contentDescription="@string/icon_facebook"
+                app:layout_constraintTop_toTopOf="@id/btnGoogle"
+                app:layout_constraintStart_toEndOf="@id/btnGoogle"
+                android:layout_marginStart="@dimen/margin_espaciado_redes"/>
+
+            <Button
+                android:id="@+id/btnRegistrar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Registrarse"
+                app:layout_constraintTop_toBottomOf="@id/btnGoogle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="24dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

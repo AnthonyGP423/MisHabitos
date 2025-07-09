@@ -1,4 +1,11 @@
 package com.sise.mishabitos.activities;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import java.util.Calendar;
+import java.util.TimeZone;
+
+import com.sise.mishabitos.receivers.AlarmReceiver;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -156,7 +163,7 @@ public class CrearHabitoActivity extends AppCompatActivity {
         habito.setFechaCreacion(new Date());
         habito.setEstadoAuditoria(true);
 
-        //Asignar usuario COMPLETO
+        // Asignar usuario COMPLETO
         Usuario usuario = new Usuario(idUsuario);
         habito.setUsuario(usuario);
 
@@ -175,13 +182,66 @@ public class CrearHabitoActivity extends AppCompatActivity {
             @Override
             public void onSuccess(String mensaje) {
                 Toast.makeText(CrearHabitoActivity.this, mensaje, Toast.LENGTH_SHORT).show();
+
+                // Si el usuario activó la alarma ➔ programarla en la hora exacta
+                if (swAlarma.isChecked()) {
+                    programarAlarma(nombre, hora, minuto);
+                }
+
                 finish();
             }
 
             @Override
             public void onFailure() {
-                Toast.makeText(CrearHabitoActivity.this, "Error al guardar hábito ❌", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CrearHabitoActivity.this, "Error al guardar hábito", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
+    private void programarAlarma(String nombreHabito, int hora, int minuto) {
+        try {
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            intent.putExtra("titulo", "Recordatorio de Hábito");
+            intent.putExtra("mensaje", "Es hora de: " + nombreHabito);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    this,
+                    (int) System.currentTimeMillis(),
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+            );
+
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("America/Lima"));
+            calendar.set(Calendar.HOUR_OF_DAY, hora);
+            calendar.set(Calendar.MINUTE, minuto);
+            calendar.set(Calendar.SECOND, 0);
+
+            if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+            }
+
+            if (alarmManager != null) {
+                boolean puedeProgramarExacta = true;
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                    puedeProgramarExacta = alarmManager.canScheduleExactAlarms();
+                }
+
+                if (puedeProgramarExacta) {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+                    Toast.makeText(this, "Alarma programada para: " + String.format(Locale.getDefault(), "%02d:%02d", hora, minuto), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Este dispositivo no permite alarmas exactas (Android 12+).", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "⚠Error al programar la alarma (tranqui, el hábito se guardó).", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

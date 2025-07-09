@@ -17,7 +17,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.sise.mishabitos.activities.MainActivity;
 import com.sise.mishabitos.R;
 import com.sise.mishabitos.shared.Constants;
 import com.sise.mishabitos.shared.SharedPreferencesManager;
@@ -31,7 +30,7 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText edtUsuario, edtContrasena;
-    private Button btnIniciar;
+    private Button btnIniciar, btnRegistrar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +54,14 @@ public class LoginActivity extends AppCompatActivity {
         edtUsuario = findViewById(R.id.edtCorreo);
         edtContrasena = findViewById(R.id.edtContrasena);
         btnIniciar = findViewById(R.id.btnIniciar);
+        btnRegistrar = findViewById(R.id.btnRegistrar);
 
         btnIniciar.setOnClickListener(v -> login());
+
+        btnRegistrar.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void login() {
