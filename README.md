@@ -75,7 +75,8 @@ Este proyecto está en desarrollo como parte del aprendizaje de Android. Se acep
 
 ---
 
-## 📝 Licencia
+## 📝 Maqueta
 
-Este proyecto está bajo la licencia MIT. Puedes usarlo libremente con fines educativos o personales.
+![Interfaces (maqueta)](https://github.com/user-attachments/assets/5b765e91-1a91-44c0-812e-57c79126731d)
+
 
