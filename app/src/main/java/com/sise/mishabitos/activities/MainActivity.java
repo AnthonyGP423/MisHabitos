@@ -96,12 +96,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fraseViewModel.listarFrases(this);
 
         habitoViewModel.getListarHabitosLiveData().observe(this, response -> {
-            if (response.isSuccess()) {
+            if (response != null && response.isSuccess() && response.getData() != null) {
+
                 habitosDelUsuario = response.getData();
                 Log.d("MainActivity", "Hábitos obtenidos: " + habitosDelUsuario.size());
 
-                seguimientoViewModel.listarSeguimientosCompletadosPorUsuario(this, idUsuario);
+                // Siempre actualiza la lista, aunque sea vacía
+                habitoAdapter.actualizarLista(habitosDelUsuario);
+
+                if (habitosDelUsuario.isEmpty()) {
+                    Toast.makeText(this, "No tienes hábitos aún.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Solo si hay hábitos, carga los seguimientos
+                    seguimientoViewModel.listarSeguimientosCompletadosPorUsuario(this, idUsuario);
+                }
+
             } else {
+                // Si hubo error, vacía la lista visual
+                habitoAdapter.actualizarLista(new ArrayList<>());
                 Toast.makeText(this, "No se pudieron cargar los hábitos", Toast.LENGTH_SHORT).show();
             }
         });

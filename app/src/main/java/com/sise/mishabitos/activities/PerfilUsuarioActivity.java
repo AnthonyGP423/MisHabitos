@@ -79,13 +79,13 @@ public class PerfilUsuarioActivity extends AppCompatActivity {
                     sp.saveFechaNacimiento(usuario.getFechaNacimiento() != null ? dateFormat.format(usuario.getFechaNacimiento()) : "");
 
                     cargarDatosUsuario();
-                    Toast.makeText(PerfilUsuarioActivity.this, "Perfil actualizado 🎉", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PerfilUsuarioActivity.this, "Perfil actualizado", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure() {
-                Toast.makeText(PerfilUsuarioActivity.this, "Error al obtener datos actualizados ❌", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PerfilUsuarioActivity.this, "Error al obtener datos actualizados", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -166,8 +166,8 @@ public class PerfilUsuarioActivity extends AppCompatActivity {
         usuarioRepository.actualizarUsuario(this, usuarioActualizado, new com.sise.mishabitos.shared.Callback<String>() {
             @Override
             public void onSuccess(String result) {
-                Toast.makeText(PerfilUsuarioActivity.this, "Datos actualizados en servidor 🚀", Toast.LENGTH_SHORT).show();
-                obtenerDatosUsuarioDesdeServidor();  // ✅ Refrescar después de actualizar
+                Toast.makeText(PerfilUsuarioActivity.this, "Datos actualizados en servidor", Toast.LENGTH_SHORT).show();
+                obtenerDatosUsuarioDesdeServidor();  // Refrescar después de actualizar
             }
 
             @Override
