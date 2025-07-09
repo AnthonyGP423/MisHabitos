@@ -6,12 +6,13 @@
     android:id="@+id/layout_estadisticas"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/imagensession"
     tools:context=".activities.EstadisticasActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/azulado"
         app:title="Estadísticas"
         app:titleTextColor="@android:color/white"
@@ -19,56 +20,65 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <LinearLayout
-        android:id="@+id/container_estadisticas"
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="24dp"
+        android:layout_height="wrap_content"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="12dp"
+        android:layout_margin="@dimen/margin_crearusu"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ProgressBar
-            android:id="@+id/progresoHabitos"
-            style="?android:attr/progressBarStyleHorizontal"
+        <LinearLayout
+            android:id="@+id/container_estadisticas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:progress="50"
-            android:max="100"
-            android:progressTint="@color/verde_claro"
-            android:layout_marginBottom="16dp"/>
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="@dimen/padding_card">
 
-        <TextView
-            android:id="@+id/txtPorcentaje"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="50%"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/verde_claro"
-            android:layout_marginBottom="24dp"/>
+            <ProgressBar
+                android:id="@+id/progresoHabitos"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="50"
+                android:max="100"
+                android:progressTint="@color/verde_claro"
+                android:layout_marginBottom="@dimen/padding_input"/>
 
-        <TextView
-            android:id="@+id/txtMensajeMotivacional"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="¡Sigue así, vas muy bien!"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"
-            android:textAlignment="center"/>
+            <TextView
+                android:id="@+id/txtPorcentaje"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="50%"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/verde_claro"
+                android:layout_marginBottom="@dimen/margin_crearusu"/>
 
-        <!-- Placeholder para gráfico de barras -->
-        <!--
-        <com.github.mikephil.charting.charts.BarChart
-            android:id="@+id/barChart"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:layout_marginTop="24dp"/>
-        -->
+            <TextView
+                android:id="@+id/txtMensajeMotivacional"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¡Sigue así, vas muy bien!"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:textAlignment="center"
+                android:gravity="center"/>
 
-    </LinearLayout>
+            <!-- Placeholder para gráfico de barras -->
+            <!--
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/barChart"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginTop="24dp"/>
+            -->
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
