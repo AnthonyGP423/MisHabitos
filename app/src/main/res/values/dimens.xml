@@ -45,4 +45,9 @@
     <dimen name="margin_crearusu">16dp</dimen>
     <dimen name="margin_starusu">8dp</dimen>
 
+    <dimen name="logo_log">200</dimen>
+    <dimen name="logo_heit">200</dimen>
+
+
+
 </resources>
