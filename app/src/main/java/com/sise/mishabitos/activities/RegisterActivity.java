@@ -27,7 +27,7 @@ import java.util.Locale;
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText nombreInput, apellidoPaternoInput, apellidoMaternoInput, correoInput, passwordInput, fechaNacimientoInput;
-    private Button registerButton;
+    private Button registerButton, cancelarButton;
 
     private final Calendar calendario = Calendar.getInstance();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -44,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         passwordInput = findViewById(R.id.input_password);
         fechaNacimientoInput = findViewById(R.id.input_fecha_nacimiento);
         registerButton = findViewById(R.id.button_register);
+        cancelarButton = findViewById(R.id.button_cancelar);  // 👈 Asegúrate de tener este ID en el XML
 
         // Abrir calendario al tocar el campo fecha
         fechaNacimientoInput.setFocusable(false);
@@ -51,6 +52,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Al hacer clic en Registrar
         registerButton.setOnClickListener(v -> registerUser());
+
+        cancelarButton.setOnClickListener(v -> {
+            // Ir al Login y cerrar pantalla actual
+            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            finish();
+        });
+
     }
 
     private void mostrarDatePicker() {
