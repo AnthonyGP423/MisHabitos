@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/imagensession"
     tools:context=".activities.CrearHabitoActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/azulado"
         app:title="@string/titulo_crear_tarea"
         app:titleTextColor="@android:color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -31,47 +33,59 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="@dimen/padding_card"
+            android:background="@android:color/white"
+            android:elevation="2dp"
+            android:layout_margin="@dimen/margin_crearusu">
 
             <EditText
                 android:id="@+id/txtNombreHabito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="@dimen/padding_input"
                 android:hint="@string/nombre_habito"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:background="@drawable/edittext_background"
+                android:padding="@dimen/padding_input" />
 
             <EditText
                 android:id="@+id/txtDetallesHabito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
                 android:hint="@string/detalles_habito"
                 android:inputType="textMultiLine"
-                android:minLines="3" />
+                android:minLines="3"
+                android:background="@drawable/edittext_background"
+                android:padding="@dimen/padding_input"
+                android:layout_marginBottom="@dimen/margin_crearusu" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Categoría"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="#333"
+                android:layout_marginBottom="4dp" />
 
             <Spinner
                 android:id="@+id/spCategoria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="@dimen/margin_crearusu" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/dias_titulo"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="#333"
+                android:layout_marginBottom="@dimen/margin_starusu" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <GridLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:columnCount="7"
+                android:layout_marginBottom="@dimen/margin_crearusu">
 
                 <CheckBox android:id="@+id/cbLunes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="L" />
                 <CheckBox android:id="@+id/cbMartes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="M" />
@@ -80,36 +94,41 @@
                 <CheckBox android:id="@+id/cbViernes" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="V" />
                 <CheckBox android:id="@+id/cbSabado" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="S" />
                 <CheckBox android:id="@+id/cbDomingo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="D" />
-            </LinearLayout>
+            </GridLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hora sugerida"
-                android:layout_marginTop="16dp"/>
+                android:textStyle="bold"
+                android:textColor="#333"
+                android:layout_marginBottom="@dimen/margin_starusu" />
 
             <TimePicker
                 android:id="@+id/horadelatarea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:timePickerMode="spinner"/>
+                android:timePickerMode="spinner" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/margin_crearusu"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/alarma_titulo" />
+                    android:text="@string/alarma_titulo"
+                    android:textStyle="bold"
+                    android:textColor="#333" />
 
                 <Switch
                     android:id="@+id/swAlarma"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_starusu" />
             </LinearLayout>
 
             <LinearLayout
@@ -123,21 +142,23 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="@dimen/margin_starusu"
                     android:backgroundTint="@color/aceptar_color"
-                    android:text="@string/agregar_tarea"/>
+                    android:text="@string/agregar_tarea"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/btnCancelarTarea"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="@dimen/margin_starusu"
                     android:backgroundTint="@color/rechazar_color"
-                    android:text="@string/btn_cancelar_tarea"/>
+                    android:text="@string/btn_cancelar_tarea"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold" />
             </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

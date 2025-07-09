@@ -6,12 +6,13 @@
     android:id="@+id/layout_historial"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/imagensession"
     tools:context=".activities.HistorialActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:background="@color/azulado"
         app:title="Historial"
         app:titleTextColor="@android:color/white"
@@ -19,40 +20,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerHistorial"
+    <androidx.cardview.widget.CardView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="16dp"
+        android:layout_margin="@dimen/margin_crearusu"
+        android:background="@android:color/white"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="12dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_volver_main"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
 
-
-    <Button
-        android:id="@+id/btn_volver_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Volver"
-        android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:background="@drawable/redondear_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="40dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerHistorial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/padding_card"/>
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/txtHistorialVacio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No hay registros aún"
+        android:text="@string/sin_registros"
         android:textSize="18sp"
-        android:visibility="gone"
         android:textColor="@android:color/darker_gray"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toTopOf="@id/btn_volver_main"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"/>
+
+    <Button
+        android:id="@+id/btn_volver_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_volver"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:background="@drawable/redondear_button"
+        android:layout_marginBottom="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

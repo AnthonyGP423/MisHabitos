@@ -41,4 +41,8 @@
     <!-- Estilos de CardView -->
     <dimen name="card_radius">24dp</dimen>
     <dimen name="card_elevation">6dp</dimen>
+
+    <dimen name="margin_crearusu">16dp</dimen>
+    <dimen name="margin_starusu">8dp</dimen>
+
 </resources>

@@ -1,74 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/imagensession"
+    tools:context=".activities.RegisterActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardRegister"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_card"
+        app:cardCornerRadius="@dimen/card_radius"
+        app:cardElevation="@dimen/card_elevation"
+        app:cardBackgroundColor="@color/morado_claro"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
-            android:id="@+id/input_nombre"
-            android:hint="Nombre"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/input_apellido_paterno"
-            android:hint="Apellido Paterno"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="24dp">
 
-        <EditText
-            android:id="@+id/input_apellido_materno"
-            android:hint="Apellido Materno"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" />
+                <TextView
+                    android:id="@+id/lblTitulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Registrarse"
+                    style="@style/TituloLoginText"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-        <EditText
-            android:id="@+id/input_correo"
-            android:hint="Correo"
-            android:inputType="textEmailAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" />
+                <EditText
+                    android:id="@+id/input_nombre"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/nombre_usu"
+                    style="@style/InputTexto"
+                    app:layout_constraintTop_toBottomOf="@id/lblTitulo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp" />
 
-        <EditText
-            android:id="@+id/input_password"
-            android:hint="Contraseña"
-            android:inputType="textPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" />
+                <EditText
+                    android:id="@+id/input_apellido_paterno"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/apellido_paterno_usu"
+                    style="@style/InputTexto"
+                    app:layout_constraintTop_toBottomOf="@id/input_nombre"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp" />
 
-        <EditText
-            android:id="@+id/input_fecha_nacimiento"
-            android:hint="Fecha de Nacimiento"
-            android:focusable="false"
-            android:clickable="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" />
+                <EditText
+                    android:id="@+id/input_apellido_materno"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/apellido_materno_usu"
+                    style="@style/InputTexto"
+                    app:layout_constraintTop_toBottomOf="@id/input_apellido_paterno"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp" />
 
-        <Button
-            android:id="@+id/button_register"
-            android:text="Registrar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp" />
+                <EditText
+                    android:id="@+id/input_correo"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/correo_usu"
+                    android:inputType="textEmailAddress"
+                    style="@style/InputTexto"
+                    app:layout_constraintTop_toBottomOf="@id/input_apellido_materno"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp" />
 
-        <Button
-            android:id="@+id/button_cancelar"
-            android:text="Cancelar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:backgroundTint="@color/gris_pizarra"
-            android:textColor="@android:color/white"/>
+                <EditText
+                    android:id="@+id/input_password"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/contraseña_usu"
+                    android:inputType="textPassword"
+                    style="@style/InputTexto"
+                    app:layout_constraintTop_toBottomOf="@id/input_correo"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp" />
 
-    </LinearLayout>
-</ScrollView>
+                <EditText
+                    android:id="@+id/input_fecha_nacimiento"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/fecha_de_nacimiento_usu"
+                    android:clickable="true"
+                    android:focusable="false"
+                    style="@style/InputTexto"
+                    android:drawableRight="@drawable/ic_calendar"
+                    android:drawableEnd="@drawable/ic_calendar"
+                    app:layout_constraintTop_toBottomOf="@id/input_password"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp" />
+
+                <Button
+                    android:id="@+id/button_register"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_registrar"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    app:backgroundTint="@color/azulado"
+                    app:layout_constraintTop_toBottomOf="@id/input_fecha_nacimiento"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="24dp" />
+
+                <Button
+                    android:id="@+id/button_cancelar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_cancelar"
+                    android:textColor="@android:color/white"
+                    app:backgroundTint="@color/gris_pizarra"
+                    app:layout_constraintTop_toBottomOf="@id/button_register"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="8dp" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

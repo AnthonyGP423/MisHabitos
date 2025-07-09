@@ -3,67 +3,69 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_margin="@dimen/margin_crearusu"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:backgroundTint="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="@dimen/padding_card">
 
         <TextView
             android:id="@+id/txtNombreHabito"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre del Hábito"
+            android:text="@string/nombre_del_habito"
             android:textStyle="bold"
             android:textSize="18sp"
-            android:textColor="@color/black"/>
+            android:textColor="#333333" />
 
         <TextView
             android:id="@+id/txtDescripcionHabito"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Descripción breve del hábito"
+            android:text="@string/descripcion_habito"
             android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="4dp"
+            android:textColor="#666666" />
 
         <TextView
             android:id="@+id/txtHoraSugerida"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hora sugerida: 08:00 AM"
             android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="4dp"
+            android:textColor="#777777" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:gravity="end">
+            android:layout_marginTop="12dp"
+            android:gravity="end"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnEditarHabito"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Editar"
-                android:backgroundTint="@color/azulado"
+                android:text="@string/btn_editar"
+                android:textStyle="bold"
                 android:textColor="@android:color/white"
-                android:layout_marginEnd="8dp"/>
+                android:backgroundTint="@color/azulado"
+                android:layout_marginEnd="@dimen/margin_starusu" />
 
             <Button
                 android:id="@+id/btnCompletarHabito"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Completar"
-                android:backgroundTint="@color/verde_claro"
-                android:textColor="@android:color/white"/>
-
+                android:text="@string/btn_completar"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/verde_claro" />
         </LinearLayout>
 
     </LinearLayout>
