@@ -1,7 +1,8 @@
 package com.sise.mishabitos.activities;
+import com.google.android.material.snackbar.Snackbar;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         configurarRecyclerHabitos();
         configurarBotonFlotante();
     }
+
     private void inicializarUI() {
         fraseMostrada = findViewById(R.id.frase_mostrada);
         btnOtraFrase = findViewById(R.id.btn_otra_frase);
@@ -87,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(this, HistorialActivity.class));
         });
     }
+
     private void configurarViewModels() {
         fraseViewModel = new ViewModelProvider(this).get(FraseMotivacionalViewModel.class);
         habitoViewModel = new ViewModelProvider(this).get(HabitoViewModel.class);
@@ -96,12 +100,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fraseViewModel.listarFrases(this);
 
         habitoViewModel.getListarHabitosLiveData().observe(this, response -> {
-            if (response.isSuccess()) {
+            if (response != null && response.isSuccess() && response.getData() != null) {
                 habitosDelUsuario = response.getData();
                 Log.d("MainActivity", "Hábitos obtenidos: " + habitosDelUsuario.size());
 
-                seguimientoViewModel.listarSeguimientosCompletadosPorUsuario(this, idUsuario);
+                habitoAdapter.actualizarLista(habitosDelUsuario);
+
+                if (habitosDelUsuario.isEmpty()) {
+                    Toast.makeText(this, "No tienes hábitos aún.", Toast.LENGTH_SHORT).show();
+                } else {
+                    seguimientoViewModel.listarSeguimientosCompletadosPorUsuario(this, idUsuario);
+                }
+
             } else {
+                habitoAdapter.actualizarLista(new ArrayList<>());
                 Toast.makeText(this, "No se pudieron cargar los hábitos", Toast.LENGTH_SHORT).show();
             }
         });
@@ -109,10 +121,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         seguimientoViewModel.getSeguimientosCompletadosLiveData().observe(this, response -> {
             if (response.isSuccess()) {
                 seguimientosCompletados = response.getData();
-                Log.d("MainActivity", "Seguimientos COMPLETADOS recibidos: " + seguimientosCompletados.size());
+                Log.d("MainActivity", "Seguimientos COMPLETADOS: " + seguimientosCompletados.size());
                 actualizarVistaHabitos();
             } else {
-                Toast.makeText(this, "No se pudieron cargar seguimientos completados", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "No se pudieron cargar los seguimientos", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -242,6 +254,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         builder.show();
     }
 
+    private void cerrarSesionConDespedida() {
+        SharedPreferencesManager.getInstance(this).clearSession();
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setMessage("👋 Hasta pronto, gracias por usar MisHábitos 💜");
+        builder.setCancelable(false); // no permite cerrar manualmente
+
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
+
+        new Handler().postDelayed(() -> {
+            dialog.dismiss();
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }, 2000);
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
@@ -253,11 +284,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_faq) {
             Toast.makeText(this, "Abriste FAQ", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_logout) {
-            SharedPreferencesManager.getInstance(this).clearSession();
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
+            cerrarSesionConDespedida();
         }
 
         drawer.closeDrawer(GravityCompat.START);
