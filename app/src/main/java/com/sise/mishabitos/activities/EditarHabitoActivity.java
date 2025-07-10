@@ -1,5 +1,14 @@
 package com.sise.mishabitos.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+
+import com.sise.mishabitos.receivers.AlarmReceiver;
+
+import java.util.Calendar;
+import java.util.TimeZone;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -57,7 +66,7 @@ public class EditarHabitoActivity extends AppCompatActivity {
             return;
         }
 
-        observarLiveData();  // 👈 Nuevo
+        observarLiveData();
         cargarDatosHabito();
         cargarCategorias();
         cargarFrecuencias();
@@ -81,7 +90,21 @@ public class EditarHabitoActivity extends AppCompatActivity {
         btnGuardar = findViewById(R.id.btnGuardarCambios);
         btnEliminar = findViewById(R.id.btnEliminarHabito);
 
-        btnGuardar.setOnClickListener(v -> guardarCambios());
+
+        btnGuardar.setOnClickListener(v -> {
+            guardarCambios();  // Aquí actualiza el hábito correctamente
+
+            String nombreHabito = edtNombre.getText().toString().trim();
+            int hora = timePicker.getHour();
+            int minuto = timePicker.getMinute();
+
+            if (swAlarma.isChecked()) {
+                programarAlarma(nombreHabito, hora, minuto);
+            } else {
+                cancelarAlarma();  //
+            }
+        });
+
         btnEliminar.setOnClickListener(v -> eliminarHabito());
     }
 
@@ -146,7 +169,50 @@ public class EditarHabitoActivity extends AppCompatActivity {
             }
         });
     }
+    private void programarAlarma(String nombreHabito, int hora, int minuto) {
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.putExtra("titulo", "Recordatorio de Hábito");
+        intent.putExtra("mensaje", "Es hora de: " + nombreHabito);
 
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                habitoActual.getIdHabito(),  // Usamos el ID del hábito como requestCode para que sea único
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("America/Lima"));
+        calendar.set(Calendar.HOUR_OF_DAY, hora);
+        calendar.set(Calendar.MINUTE, minuto);
+        calendar.set(Calendar.SECOND, 0);
+
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            Toast.makeText(this, "⏰ Alarma programada para: " + String.format("%02d:%02d", hora, minuto), Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void cancelarAlarma() {
+        Intent intent = new Intent(this, AlarmReceiver.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                habitoActual.getIdHabito(),  // Mismo ID para encontrar la alarma existente
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+            Toast.makeText(this, "🚫 Alarma cancelada", Toast.LENGTH_SHORT).show();
+        }
+    }
     private void cargarDatosHabito() {
         edtNombre.setText(habitoActual.getNombre());
         edtDescripcion.setText(habitoActual.getDescripcion());
